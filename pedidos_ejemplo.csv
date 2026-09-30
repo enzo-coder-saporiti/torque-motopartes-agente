@@ -1,9 +1,0 @@
-nro_pedido,cliente,email,producto,estado,fecha_compra,fecha_estimada_entrega,empresa_envio,tracking
-TM-1001,Juan Pérez,juan.perez@example.com,Kit de transmisión Honda CG 150,Entregado,2026-09-10,2026-09-15,Andreani,AND123456
-TM-1002,Laura Gómez,laura.gomez@example.com,Pastillas de freno delanteras Yamaha FZ,En camino,2026-09-22,2026-10-01,Correo Argentino,CA987654
-TM-1003,Martín Díaz,martin.diaz@example.com,Casco rebatible LS2 talle L,Despachado,2026-09-25,2026-10-02,OCA,OCA555111
-TM-1004,Sofía Romero,sofia.romero@example.com,Cubierta trasera Pirelli 130/70-17,Preparando,2026-09-27,2026-10-04,Andreani,-
-TM-1005,Diego Fernández,diego.fernandez@example.com,Batería Yuasa YTX7L-BS,Demorado,2026-09-15,2026-09-22,Correo Argentino,CA112233
-TM-1006,Carla Sosa,carla.sosa@example.com,Guantes de cuero Alpinestars talle M,Cancelado,2026-09-18,-,-,-
-TM-1007,Pablo Ruiz,pablo.ruiz@example.com,Filtro de aceite Honda Twister 250,Entregado,2026-09-05,2026-09-09,OCA,OCA778899
-TM-1008,Valeria Castro,valeria.castro@example.com,Cadena reforzada DID 428H,En camino,2026-09-24,2026-09-30,Andreani,AND654321
