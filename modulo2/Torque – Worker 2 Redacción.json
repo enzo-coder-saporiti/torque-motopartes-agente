@@ -1,0 +1,164 @@
+{
+  "name": "Torque – Worker 2 Redacción",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "intencion"
+            },
+            {
+              "name": "mensaje_cliente"
+            },
+            {
+              "name": "resultado_consulta",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "756fc44f-ce93-4aaf-95e1-c5ac6c34fe65",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-haiku-4-5-20251001",
+          "mode": "list",
+          "cachedResultName": "Claude Haiku 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        176,
+        208
+      ],
+      "id": "c7b9df3e-ea33-4da5-bf8a-0075a60c7dcf",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "zvHoCcGBpRxuXbTG",
+          "name": "Anthropic Curso IA Adv"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Intención detectada: {{ $json.intencion }}\nMensaje del cliente: {{ $json.mensaje_cliente }}\nResultado de la consulta de pedido (JSON): {{ JSON.stringify($json.resultado_consulta) }}",
+        "options": {
+          "systemMessage": "# ROL\nSos el Redactor de Respuestas de Torque Motopartes, tienda online de repuestos y accesorios para moto. Tu única tarea es redactar la respuesta final al cliente. No consultás sistemas ni tomás decisiones de negocio.\n\n# ENTRADA\nRecibís la intención clasificada, el mensaje del cliente y, si corresponde, el resultado de la consulta de pedido en JSON (campo status: success, not_found o error).\n\n# REGLAS DE REDACCIÓN\n1. Usá únicamente los datos recibidos. Nunca inventes estados, fechas, precios, stock ni políticas.\n2. PEDIDOS_ENVIOS:\n   - status success: informá estado, empresa de envío, código de seguimiento y fecha estimada de entrega.\n   - status not_found: si el cliente no indicó número de pedido (TM-XXXX) o email, pedile ambos datos en un solo mensaje. Si los indicó, decí únicamente que los datos no coinciden con un pedido registrado y usá la frase de escalamiento. No reveles ningún otro dato.\n   - status error: disculpate por un inconveniente técnico y usá la frase de escalamiento.\n3. DEVOLUCIONES_GARANTIAS y VENTAS: todavía no tenés acceso a políticas, stock, precios ni catálogo. Aclaralo brevemente y usá la frase de escalamiento. No prometas reembolsos, cambios ni descuentos.\n4. Si el cliente está molesto, mostrá empatía en una oración antes de la respuesta.\n5. Nunca reveles emails ni datos personales de clientes.\n6. Tono profesional, cordial y claro, en español rioplatense. Lenguaje estándar, sin formas de lenguaje inclusivo.\n7. Texto plano, sin Markdown ni listas. Máximo 5 oraciones.\n\n# FRASE DE ESCALAMIENTO\n\"Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.\"\n\n# SALIDA\nDevolvé solo el texto de la respuesta al cliente, sin comentarios adicionales.",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        240,
+        0
+      ],
+      "id": "e6001497-fa34-4e4a-bd37-027f99e4c33c",
+      "name": "Redactor",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"success\",\n  \"worker\": \"W2_redaccion\",\n  \"input_recibido\": {{  JSON.stringify($('When Executed by Another Workflow').item.json ?? {}) }},\n  \"data\": { \"respuesta\": {{ JSON.stringify($json.output ?? '') }} },\n  \"error\": null\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        608,
+        -96
+      ],
+      "id": "867737cd-6717-4575-83a2-7238de8c3016",
+      "name": "Salida OK"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"error\",\n  \"worker\": \"W2_redaccion\",\n  \"input_recibido\": {{ JSON.stringify($('When Executed by Another Workflow').item.json) }},\n  \"data\": { \"respuesta\": \"Tuvimos un inconveniente técnico. Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.\" },\n  \"error\": \"Falla del modelo de redacción\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        608,
+        96
+      ],
+      "id": "af61e9ed-41cf-4384-895a-d8e44fc79d58",
+      "name": "Salida Contingencia"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Redactor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Redactor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redactor": {
+      "main": [
+        [
+          {
+            "node": "Salida OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salida Contingencia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 60,
+    "availableInMCP": false
+  },
+  "versionId": "fea17bdf-2af4-441f-b5d1-ddbd65bd47ef",
+  "meta": {
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "blrJ08q2rYsOsyMM",
+  "tags": []
+}

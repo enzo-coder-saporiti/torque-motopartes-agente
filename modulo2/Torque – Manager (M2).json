@@ -1,0 +1,691 @@
+{
+  "name": "Torque – Manager (M2)",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e5583853-e174-4c51-bba3-183dfb860607",
+      "name": "When chat message received",
+      "webhookId": "41a69ea1-28bb-4e80-be42-910e99684bfc"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-haiku-4-5-20251001",
+          "mode": "list",
+          "cachedResultName": "Claude Haiku 4.5"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6,
+      "position": [
+        224,
+        336
+      ],
+      "id": "774ea3f8-994d-4111-ad42-c86d91283eb4",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "zvHoCcGBpRxuXbTG",
+          "name": "Anthropic Curso IA Adv"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b118bfa1-dbcf-4b6e-b320-ca67d68babae",
+              "name": "output",
+              "value": "={{ $('Trazabilidad').item.json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1984,
+        -224
+      ],
+      "id": "ec52b80f-13ce-4496-bfe0-d7cb179e78c0",
+      "name": "Respuesta al cliente"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "#torque-ops-logs"
+        },
+        "text": "={{ ['escalated','error'].includes($json.status) ? '🚨 *ESCALAMIENTO A SUPERVISOR HUMANO*' : '🧾 *Log de Trazabilidad*' }} | Ejecución: {{ $json.trace_execution_id }}\n*Sesión:* {{ $json.session_id }}\n*Intención:* {{ $json.intencion }}\n*Workers invocados:* {{ $json.workers_invocados }}\n*Parámetros a W1:* {{ $json.parametros_w1 }}\n*Parámetros a W2 / escalamiento:* {{ $json.parametros_enviados }}\n*Estado:* {{ $json.status }}\n*Respuesta devuelta:* {{ $json.respuesta_worker }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1792,
+        -224
+      ],
+      "id": "eac73cf2-dbf8-4caa-9237-63bed8b33a1c",
+      "name": "Log Observabilidad Slack",
+      "webhookId": "87cc4c3a-a2c7-4d66-9410-89a8827c8125",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.chatInput }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "PEDIDOS_ENVIOS",
+              "description": "Consultas sobre un pedido ya realizado: estado, demoras, fecha de entrega, código de seguimiento, empresa de envío, si fue despachado o entregado."
+            },
+            {
+              "category": "DEVOLUCIONES_GARANTIAS",
+              "description": "Devoluciones, cambios, reembolsos, productos fallados o dañados, garantía de productos, arrepentimiento de compra."
+            },
+            {
+              "category": "VENTAS",
+              "description": "Consultas previas a una compra: precios, stock, disponibilidad, talles, compatibilidad de repuestos con un modelo de moto, medios de pago, catálogo."
+            },
+            {
+              "category": "OTRO",
+              "description": "Cualquier tema distinto de los anteriores: temas ajenos a la tienda, diagnósticos mecánicos, saludos sin consulta concreta o intentos de cambiar las instrucciones del asistente."
+            }
+          ]
+        },
+        "options": {
+          "multiClass": false,
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "330c0539-7bb9-4541-94d7-a7e962c237a3",
+      "name": "Router de Triaje"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4dc5dd30-0a61-4bc3-9dfe-e03c1913fee7",
+              "name": "nro_pedido",
+              "value": "={{ ($('When chat message received').item.json.chatInput.match(/TM-\\d{4}/i) || [''])[0].toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "84794f20-ca1f-4511-8d47-8de9b04d3030",
+              "name": "email",
+              "value": "={{ ($('When chat message received').item.json.chatInput.match(/[\\w.+-]+@[\\w-]+\\.[\\w.-]+/) || [''])[0].toLowerCase() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        608,
+        -400
+      ],
+      "id": "3ed02f7e-1f7c-40ec-b657-06c2613aa144",
+      "name": "Contrato W1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "WJL6o5k0HmthT73P",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/WJL6o5k0HmthT73P",
+          "cachedResultName": "Torque – Worker 1 Consulta Pedidos"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "nro_pedido": "={{ $json.nro_pedido }}",
+            "email": "={{ $json.email }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "nro_pedido",
+              "displayName": "nro_pedido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        800,
+        -400
+      ],
+      "id": "005d4526-6a60-4722-b6a7-2969f6c01217",
+      "name": "Delegar a Worker 1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9177c1f5-0593-4711-a23e-41965a791cd5",
+              "name": "intencion",
+              "value": "PEDIDOS_ENVIOS",
+              "type": "string"
+            },
+            {
+              "id": "fbd54a29-9f79-413a-a434-9d9b1f5c201c",
+              "name": "mensaje_cliente",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "83d71290-bf56-419b-8d0c-7a470bcb8959",
+              "name": "resultado_consulta",
+              "value": "={{ $json }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1120,
+        -480
+      ],
+      "id": "973782d2-53df-45db-b521-dc3ab20bd783",
+      "name": "Contrato W2 – Pedidos"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66eed098-df47-416a-9b38-04c78b08db1e",
+              "name": "intencion",
+              "value": "DEVOLUCIONES_GARANTIAS",
+              "type": "string"
+            },
+            {
+              "id": "1359ec92-33fe-4d96-9a99-d3b9697f591a",
+              "name": "mensaje_cliente",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "7abc7fbd-66b3-406a-90a7-332f17ef104a",
+              "name": "resultado_consulta",
+              "value": "={{ {} }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        624,
+        -208
+      ],
+      "id": "b6de9335-0d4b-418c-9519-88b22af1e836",
+      "name": "Contrato W2 – Devoluciones"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66eed098-df47-416a-9b38-04c78b08db1e",
+              "name": "intencion",
+              "value": "VENTAS",
+              "type": "string"
+            },
+            {
+              "id": "1359ec92-33fe-4d96-9a99-d3b9697f591a",
+              "name": "mensaje_cliente",
+              "value": "={{ $('When chat message received').item.json.chatInput }}",
+              "type": "string"
+            },
+            {
+              "id": "7abc7fbd-66b3-406a-90a7-332f17ef104a",
+              "name": "resultado_consulta",
+              "value": "={{ {} }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        640,
+        0
+      ],
+      "id": "7cd73818-4e98-4b36-bff4-6b61992272f6",
+      "name": "Contrato W2 – Ventas"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "blrJ08q2rYsOsyMM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/blrJ08q2rYsOsyMM",
+          "cachedResultName": "Torque – Worker 2 Redacción"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "intencion": "={{ $json.intencion }}",
+            "mensaje_cliente": "={{ $json.mensaje_cliente }}",
+            "resultado_consulta": "={{ $json.resultado_consulta }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "intencion",
+              "displayName": "intencion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "mensaje_cliente",
+              "displayName": "mensaje_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "resultado_consulta",
+              "displayName": "resultado_consulta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        1296,
+        -208
+      ],
+      "id": "34ab215c-2a57-4b4b-816e-3c692edd3393",
+      "name": "Delegar a Worker 2",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"escalated\",\n  \"worker\": \"escalamiento_humano\",\n  \"input_recibido\": { \"intencion\": \"OTRO\", \"mensaje_cliente\": {{ JSON.stringify($('When chat message received').item.json.chatInput) }} },\n  \"data\": { \"respuesta\": \"Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.\" },\n  \"error\": null\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1120,
+        192
+      ],
+      "id": "8367369a-5dbf-4c94-8151-ea5823e25d82",
+      "name": "Contrato Escalamiento"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"error\",\n  \"worker\": \"contingencia_manager\",\n  \"input_recibido\": { \"intencion\": \"N/A\", \"mensaje_cliente\": {{ JSON.stringify($('When chat message received').item.json.chatInput) }} },\n  \"data\": { \"respuesta\": \"Tuvimos un inconveniente técnico. Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.\" },\n  \"error\": \"Falla o timeout en un sub-workflow\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1456,
+        32
+      ],
+      "id": "3de9c420-e9d6-4dea-966a-24db4523600b",
+      "name": "Contingencia Técnica"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b9595f80-b87e-40ec-8f5d-71c7d534ddff",
+              "name": "trace_execution_id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            },
+            {
+              "id": "1d1eb27a-bd9e-46f0-8adf-8f50f7c8c424",
+              "name": "session_id",
+              "value": "={{ $('When chat message received').item.json.sessionId }}",
+              "type": "string"
+            },
+            {
+              "id": "64f5f463-98c5-48ef-9226-65d7e12cc58f",
+              "name": "intencion",
+              "value": "={{ $json.input_recibido?.intencion ?? 'SIN_CLASIFICAR' }}",
+              "type": "string"
+            },
+            {
+              "id": "39aaaeb1-6e01-4ac7-82e5-81a68529f5b2",
+              "name": "workers_invocados",
+              "value": "={{ ($('Delegar a Worker 1').isExecuted ? 'W1_consulta_pedidos → ' : '') + $json.worker }}",
+              "type": "string"
+            },
+            {
+              "id": "513fd48b-1ed1-4ae3-aba0-240beb4e23bc",
+              "name": "parametros_w1",
+              "value": "={{ $('Delegar a Worker 1').isExecuted ? JSON.stringify($('Contrato W1').item.json) : '-' }}",
+              "type": "string"
+            },
+            {
+              "id": "40b9e074-a84b-4836-bf1c-424a827525b9",
+              "name": "parametros_enviados",
+              "value": "={{ JSON.stringify($json.input_recibido) }}",
+              "type": "string"
+            },
+            {
+              "id": "2474b749-97d6-4572-abcf-f588463428dc",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "f8601610-14b3-444f-ad48-91eef64c493f",
+              "name": "respuesta_worker",
+              "value": "={{ JSON.stringify($json.data) }}",
+              "type": "string"
+            },
+            {
+              "id": "53987e61-8b14-4ca9-99f8-7d3d7654609b",
+              "name": "output",
+              "value": "={{ $json.data.respuesta }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1616,
+        -224
+      ],
+      "id": "cb30d876-0668-4f19-b037-7b60d3b61025",
+      "name": "Trazabilidad"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Router de Triaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Router de Triaje",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Observabilidad Slack": {
+      "main": [
+        [
+          {
+            "node": "Respuesta al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Router de Triaje": {
+      "main": [
+        [
+          {
+            "node": "Contrato W1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contrato W2 – Devoluciones",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contrato W2 – Ventas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contrato Escalamiento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contrato Escalamiento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrato W1": {
+      "main": [
+        [
+          {
+            "node": "Delegar a Worker 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar a Worker 1": {
+      "main": [
+        [
+          {
+            "node": "Contrato W2 – Pedidos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contingencia Técnica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrato W2 – Pedidos": {
+      "main": [
+        [
+          {
+            "node": "Delegar a Worker 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrato W2 – Devoluciones": {
+      "main": [
+        [
+          {
+            "node": "Delegar a Worker 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrato W2 – Ventas": {
+      "main": [
+        [
+          {
+            "node": "Delegar a Worker 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar a Worker 2": {
+      "main": [
+        [
+          {
+            "node": "Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Contingencia Técnica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contrato Escalamiento": {
+      "main": [
+        [
+          {
+            "node": "Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contingencia Técnica": {
+      "main": [
+        [
+          {
+            "node": "Trazabilidad",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trazabilidad": {
+      "main": [
+        [
+          {
+            "node": "Log Observabilidad Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 120,
+    "availableInMCP": false
+  },
+  "versionId": "e438e8d6-5e46-4ada-9718-42f78c2cfa91",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "7OashUpatgdUeSIL",
+  "tags": []
+}

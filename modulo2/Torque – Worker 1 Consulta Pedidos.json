@@ -1,0 +1,226 @@
+{
+  "name": "Torque – Worker 1 Consulta Pedidos",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "nro_pedido"
+            },
+            {
+              "name": "email"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -112
+      ],
+      "id": "07d405fe-9230-41ca-b192-5fa0a09d6151",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1oRah_1rUdiut3nsQcGJ-qk3Ui3KZiD49vCnfsL-0y8I",
+          "mode": "list",
+          "cachedResultName": "Torque_Pedidos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oRah_1rUdiut3nsQcGJ-qk3Ui3KZiD49vCnfsL-0y8I/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "pedidos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oRah_1rUdiut3nsQcGJ-qk3Ui3KZiD49vCnfsL-0y8I/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "nro_pedido",
+              "lookupValue": "={{ $json.nro_pedido }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -112
+      ],
+      "id": "dbd49671-cb26-4e11-9cb4-a5441ab2aadd",
+      "name": "Buscar pedido",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MLvxTneiTYCbtQJk",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f8a3a96-0dea-40af-81e0-39412caa5f0d",
+              "leftValue": "={{ $json.nro_pedido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "a486bfab-2d39-4906-9447-e1634aefa9ee",
+              "leftValue": "={{ String($json.email || '').toLowerCase() }}",
+              "rightValue": "={{ String($('When Executed by Another Workflow').item.json.email || '').toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        -304
+      ],
+      "id": "a603ad3a-5af0-458e-b427-7f73527822a4",
+      "name": "¿Pedido válido?"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": \"success\",\n  \"worker\": \"W1_consulta_pedidos\",\n  \"data\": {\n    \"nro_pedido\": \"{{ $json.nro_pedido }}\",\n    \"producto\": \"{{ $json.producto }}\",\n    \"estado\": \"{{ $json.estado }}\",\n    \"fecha_compra\": \"{{ $json.fecha_compra }}\",\n    \"fecha_estimada_entrega\": \"{{ $json.fecha_estimada_entrega }}\",\n    \"empresa_envio\": \"{{ $json.empresa_envio }}\",\n    \"tracking\": \"{{ $json.tracking }}\"\n  },\n  \"error\": null\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -352
+      ],
+      "id": "b816d3f7-b07f-4026-ac8e-7cf4bccdb2b8",
+      "name": "Salida OK"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"status\": \"not_found\",\n  \"worker\": \"W1_consulta_pedidos\",\n  \"data\": {},\n  \"error\": \"Pedido inexistente o email no coincide\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -160
+      ],
+      "id": "860bf2cd-255d-4083-b7de-e00aba58bd76",
+      "name": "Salida Sin Coincidencia"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"status\": \"error\",\n  \"worker\": \"W1_consulta_pedidos\",\n  \"data\": {},\n  \"error\": \"No se pudo consultar la base de pedidos\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        448,
+        144
+      ],
+      "id": "2500d362-4cf0-4311-8255-e15fddbf9037",
+      "name": "Salida Contingencia"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Buscar pedido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar pedido": {
+      "main": [
+        [
+          {
+            "node": "¿Pedido válido?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salida Contingencia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Pedido válido?": {
+      "main": [
+        [
+          {
+            "node": "Salida OK",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Salida Sin Coincidencia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 30,
+    "availableInMCP": false
+  },
+  "versionId": "7f821dbf-aaca-45e1-b796-660a2706b222",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "WJL6o5k0HmthT73P",
+  "tags": []
+}
