@@ -25,7 +25,7 @@ Cada módulo parte del flujo del módulo anterior y lo extiende. No se rehace de
 | [`modulo1/`](modulo1/) | Agente base | Chat Trigger → AI Agent (Tools Agent) + tool de pedidos → Log en Slack | ✅ Entregado |
 | [`modulo2/`](modulo2/) | Multi-agente | Manager + 2 Workers como sub-workflows (patrón Manager-Worker) | ✅ Entregado |
 | [`modulo3/`](modulo3/) | Memoria | Memoria híbrida: Airtable por Session_ID + resumen automático en JSON | ✅ Entregado |
-| `modulo4/` | Integraciones | HubSpot + Gmail + Slack vía OAuth2 | Pendiente |
+| [`modulo4/`](modulo4/) | Integraciones | Canal email: Gmail + HubSpot + Slack con guardrails (anti auto-reply, Look up, borradores HITL) | ✅ Entregado |
 | `modulo5/` | RAG | Base documental en LlamaCloud | Pendiente |
 | `modulo6/` | Voz | STT / TTS vía Telegram | Pendiente |
 | ... | ... | ... | ... |
