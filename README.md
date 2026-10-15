@@ -26,7 +26,7 @@ Cada módulo parte del flujo del módulo anterior y lo extiende. No se rehace de
 | [`modulo2/`](modulo2/) | Multi-agente | Manager + 2 Workers como sub-workflows (patrón Manager-Worker) | ✅ Entregado |
 | [`modulo3/`](modulo3/) | Memoria | Memoria híbrida: Airtable por Session_ID + resumen automático en JSON | ✅ Entregado |
 | [`modulo4/`](modulo4/) | Integraciones | Canal email: Gmail + HubSpot + Slack con guardrails (anti auto-reply, Look up, borradores HITL) | ✅ Entregado |
-| `modulo5/` | RAG | Base documental en LlamaCloud | Pendiente |
+| [`modulo5/`](modulo5/) | RAG | Manual parseado con LlamaParse + vector store y Worker 3 de búsqueda (Top-K y Minimum Score) | ✅ Entregado |
 | `modulo6/` | Voz | STT / TTS vía Telegram | Pendiente |
 | ... | ... | ... | ... |
 | `final/` | Proyecto Final | Sistema completo supervisado + documentación | Pendiente |
