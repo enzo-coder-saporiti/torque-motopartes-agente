@@ -1,0 +1,384 @@
+{
+  "name": "Torque – Worker 3 Búsqueda Documental",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c2b3e5c5-54ff-4d1b-8c4d-818eab8651dd",
+      "name": "Ingesta manual del manual"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "feda61c5-b8b1-4754-b11d-fe038e27b291",
+              "name": "markdown",
+              "value": "=# Torque Motopartes\n\n## Manual de Políticas y Atención al Cliente\n\n*Versión 1.0 · Vigente desde el 1 de octubre de 2026 · Responsable: Gerencia de Atención al Cliente*\n\n## 1. Información general\n\nTorque Motopartes es una tienda online de repuestos y accesorios para moto. Vende a todo el territorio de la República Argentina a través de su sitio web.\n\n### 1.1 Canales y horarios de atención\n\n<table>\n  <thead>\n    <tr>\n      <th>Canal</th>\n      <th>Horario</th>\n      <th>Tiempo máximo de respuesta</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Chat del sitio web</td>\n      <td>Lunes a viernes de 9 a 18 h</td>\n      <td>Inmediato (asistente virtual) / 4 h hábiles (asesor)</td>\n    </tr>\n<tr>\n      <td>Email de soporte</td>\n      <td>Recepción las 24 h</td>\n      <td>24 h hábiles</td>\n    </tr>\n<tr>\n      <td>Teléfono</td>\n      <td>Lunes a viernes de 10 a 17 h</td>\n      <td>Atención en el momento</td>\n    </tr>\n  </tbody>\n</table>\n\nLos sábados, domingos y feriados nacionales no hay atención por teléfono. Las consultas recibidas por chat o email en esos días se responden el siguiente día hábil.\n\n## 2. Envíos\n\n### 2.1 Zonas, plazos y costos\n\nLos plazos se cuentan en días hábiles a partir de la confirmación del pago.\n\n<table>\n  <thead>\n    <tr>\n      <th>Zona</th>\n      <th>Plazo de entrega</th>\n      <th>Costo de envío</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>CABA</td>\n      <td>24 a 48 h hábiles</td>\n      <td>$4.500</td>\n    </tr>\n<tr>\n      <td>Gran Buenos Aires</td>\n      <td>48 h hábiles</td>\n      <td>$5.900</td>\n    </tr>\n<tr>\n      <td>Interior del país (resto de las provincias, excepto Patagonia)</td>\n      <td>48 a 72 h hábiles</td>\n      <td>$7.900</td>\n    </tr>\n<tr>\n      <td>Patagonia (Neuquén, Río Negro, Chubut, Santa Cruz y Tierra del Fuego)</td>\n      <td>4 a 6 días hábiles</td>\n      <td>$11.500</td>\n    </tr>\n  </tbody>\n</table>\n\n### 2.2 Envío gratis\n\nEl envío es gratis en compras superiores a $150.000 a cualquier zona del país. El beneficio no aplica a productos voluminosos marcados como «envío especial» en la ficha del producto.\n\n### 2.3 Empresas de transporte y seguimiento\n\nLos envíos se realizan por Andreani, OCA o Correo Argentino, según la zona. El código de seguimiento se envía por email cuando el pedido es despachado y puede consultarse en el sitio de la empresa de transporte.\n\n### 2.4 Retiro en depósito\n\nNo contamos con local a la calle ni retiro en depósito. Todas las compras se entregan por envío a domicilio.\n\n## 3. Medios de pago\n\n<table>\n  <thead>\n    <tr>\n      <th>Medio de pago</th>\n      <th>Condiciones</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Tarjeta de crédito</td>\n      <td>Hasta 6 cuotas sin interés con bancos adheridos; hasta 12 cuotas con interés con cualquier banco.</td>\n    </tr>\n  </tbody>\n</table>\n\n\n\n<table>\n  <thead>\n    <tr>\n      <th>Medio de pago</th>\n      <th>Condiciones</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Tarjeta de débito</td>\n      <td>Un solo pago.</td>\n    </tr>\n<tr>\n      <td>Transferencia bancaria</td>\n      <td>10% de descuento. El pedido se reserva por 48 h hasta acreditar el pago.</td>\n    </tr>\n<tr>\n      <td>Mercado Pago</td>\n      <td>Saldo en cuenta o tarjetas asociadas, con las cuotas que ofrezca la plataforma.</td>\n    </tr>\n  </tbody>\n</table>\n\nNo se aceptan pagos en efectivo ni contra entrega.\n\n## 4. Cambios y devoluciones\n\n### 4.1 Derecho de arrepentimiento\nSegún el artículo 34 de la Ley 24.240 de Defensa del Consumidor, el cliente puede arrepentirse de una compra online dentro de los 10 días corridos desde que recibe el producto, sin necesidad de explicar el motivo. El producto debe estar sin uso, con su embalaje original. Torque Motopartes reintegra el 100% del importe pagado, incluido el envío, y el retiro del producto no tiene costo para el cliente.\n\n### 4.2 Cambio por talle o modelo\nLos cambios por talle (cascos, indumentaria, guantes) o por modelo equivocado se aceptan dentro de los 30 días corridos desde la recepción, con el producto sin uso y en su embalaje original. El primer cambio tiene envío sin cargo; a partir del segundo cambio el costo de envío lo paga el cliente.\n\n### 4.3 Producto fallado o dañado\nSi el producto llega con fallas de fábrica o dañado por el transporte, el cliente puede elegir entre el reemplazo por un producto igual o el reembolso total, dentro de los 30 días corridos desde la recepción. El envío de devolución corre por cuenta de Torque Motopartes.\n\n### 4.4 Procedimiento para iniciar un cambio o devolución\n- Escribir a soporte indicando el número de pedido (formato TM-XXXX) y el motivo.\n- En caso de falla o daño, adjuntar fotos del producto y del embalaje.\n- Un asesor confirma el caso y envía la etiqueta de retiro en un plazo de 48 h hábiles.\n- Los reembolsos se acreditan por el mismo medio de pago en un plazo de 5 a 10 días hábiles desde que el producto llega al depósito.\n\n## 5. Garantías\n\n### 5.1 Plazos de garantía por categoría\n\n<table>\n  <thead>\n    <tr>\n      <th>Categoría</th>\n      <th>Plazo de garantía</th>\n      <th>Cubre</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Cascos</td>\n      <td>12 meses</td>\n      <td>Defectos de fabricación en calota, visor y\ncierres.</td>\n    </tr>\n    <tr>\n      <td>Baterías</td>\n      <td>6 meses</td>\n      <td>Fallas de carga o celdas defectuosas.</td>\n    </tr>\n    <tr>\n      <td>Cubiertas</td>\n      <td>6 meses</td>\n      <td>Defectos de fabricación (no desgaste ni\npinchaduras).</td>\n    </tr>\n    <tr>\n      <td>Kits de transmisión y cadenas</td>\n      <td>6 meses</td>\n      <td>Defectos de fabricación.</td>\n    </tr>\n    <tr>\n      <td>Componentes eléctricos (luces,\nreguladores, bobinas)</td>\n      <td>3 meses</td>\n      <td>Fallas de funcionamiento.</td>\n    </tr>\n    <tr>\n      <td>Indumentaria y guantes</td>\n      <td>3 meses</td>\n      <td>Costuras y cierres defectuosos.</td>\n    </tr>\n    <tr>\n      <td>Consumibles (pastillas de freno, filtros,\naceites, bujías)</td>\n      <td>Sin garantía</td>\n      <td>Son productos de desgaste.</td>\n    </tr>\n  </tbody>\n</table>\n\n\n### 5.2 Exclusiones\n\nLa garantía no cubre el desgaste normal, golpes o caídas, la instalación incorrecta, el uso en competición ni las modificaciones realizadas por el cliente o por terceros.\n\n## 6. Compatibilidad de repuestos\n\nCada ficha de producto indica las motos compatibles por marca, modelo, año y cilindrada. Ante dudas, el cliente puede consultar a un asesor indicando esos cuatro datos antes de comprar. Si el cliente compra un repuesto que no corresponde a su moto, aplica la política de cambio por modelo del punto 4.2.\n\n## 7. Facturación\n\nSe emite Factura B a consumidores finales y Factura A a responsables inscriptos que informen su CUIT al momento de la compra. La factura se envía por email dentro de las 24 h hábiles de acreditado el pago. No es posible modificar el tipo de factura una vez emitida.\n\n## 8. Escalamiento a un asesor\n\nEl asistente virtual deriva la conversación a un asesor humano en estos casos: reclamos formales, pedidos de reembolso, productos dañados, clientes insatisfechos y cualquier consulta que no esté cubierta por este manual.\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "73fe2d82-274f-44f1-ba49-fae739a6aa49",
+      "name": "Contenido del manual"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "value": "torque_manual_politicas",
+          "mode": "id"
+        },
+        "clearStore": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "6e985a02-6268-4668-a586-59b36bcbedc1",
+      "name": "Indexar manual (Vector Store)"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.markdown }}",
+        "textSplittingMode": "custom",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "source",
+                "value": "Manual de Políticas v1.0"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        144
+      ],
+      "id": "812160af-a3ad-409a-a49f-25f3f4602240",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        256,
+        240
+      ],
+      "id": "e12587e1-733c-415b-b1dc-4052ce58afa9",
+      "name": "Embeddings Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Ed7U4NB5x99G0pCM",
+          "name": "Gemini Embeddings Torque"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "consulta"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        416
+      ],
+      "id": "83e4c2b8-57c7-4a16-9640-93140ce53ff7",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1d65ee41-df5f-4df3-8146-fbc55082303d",
+              "name": "top_k",
+              "value": 3,
+              "type": "number"
+            },
+            {
+              "id": "4217a673-31ee-44cf-9e22-9727fc6cf44a",
+              "name": "min_score",
+              "value": 0.65,
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        112,
+        416
+      ],
+      "id": "408bc098-efc1-494d-98b8-ce64349439ab",
+      "name": "Parámetros de recuperación"
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "memoryKey": {
+          "__rl": true,
+          "value": "torque_manual_politicas",
+          "mode": "id"
+        },
+        "prompt": "={{ $json.consulta }}",
+        "topK": "={{ $json.top_k }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        416
+      ],
+      "id": "c48172fb-f2f3-49dd-8998-4a1ae9f2838e",
+      "name": "Buscar fragmentos (Top-K)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "902211e6-4e22-48cb-8b07-e6283e4f30df",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": "={{ $('Parámetros de recuperación').first().json.min_score }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        528,
+        416
+      ],
+      "id": "aa059d3b-3575-4abc-b504-99e0f5b0520d",
+      "name": "Score ≥ mínimo",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"status\": {{ JSON.stringify($json.data.filter(d => d.document).length ? 'success' : 'sin_resultados') }},\n  \"worker\": \"W3_busqueda_documental\",\n  \"consulta\": {{ JSON.stringify($('When Executed by Another Workflow').first().json.consulta) }},\n  \"parametros\": { \"top_k\": {{ $('Parámetros de recuperación').first().json.top_k }}, \"min_score\": {{ $('Parámetros de recuperación').first().json.min_score }} },\n  \"fragmentos\": {{ JSON.stringify($json.data.filter(d => d.document).map(d => ({ texto: d.document.pageContent, fuente: d.document.metadata?.source || 'Manual de Políticas v1.0', score: Math.round(d.score * 1000) / 1000 }))) }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        912,
+        416
+      ],
+      "id": "bfb8fa01-4a2e-4609-b959-7f07cf4acfed",
+      "name": "Salida Worker 3"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        752,
+        416
+      ],
+      "id": "739a4005-e6ea-4e17-b688-f80ef10e4edf",
+      "name": "Agrupar fragmentos"
+    },
+    {
+      "parameters": {
+        "chunkSize": 1500,
+        "chunkOverlap": 200,
+        "options": {
+          "splitCode": "markdown"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        720,
+        256
+      ],
+      "id": "0ac588f5-7652-4a51-a325-91b79ab83481",
+      "name": "Chunking (1500/200, Markdown)"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Ingesta manual del manual": {
+      "main": [
+        [
+          {
+            "node": "Contenido del manual",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contenido del manual": {
+      "main": [
+        [
+          {
+            "node": "Indexar manual (Vector Store)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Indexar manual (Vector Store)",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Indexar manual (Vector Store)",
+            "type": "ai_embedding",
+            "index": 0
+          },
+          {
+            "node": "Buscar fragmentos (Top-K)",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Parámetros de recuperación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parámetros de recuperación": {
+      "main": [
+        [
+          {
+            "node": "Buscar fragmentos (Top-K)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar fragmentos (Top-K)": {
+      "main": [
+        [
+          {
+            "node": "Score ≥ mínimo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score ≥ mínimo": {
+      "main": [
+        [
+          {
+            "node": "Agrupar fragmentos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agrupar fragmentos": {
+      "main": [
+        [
+          {
+            "node": "Salida Worker 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunking (1500/200, Markdown)": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 30,
+    "availableInMCP": false
+  },
+  "versionId": "da8e6849-190b-4536-b5d4-d9e6ed94e4cc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "lCVvSDUBGzRMpsfF",
+  "tags": []
+}
