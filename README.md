@@ -28,6 +28,7 @@ Cada módulo parte del flujo del módulo anterior y lo extiende. No se rehace de
 | [`modulo4/`](modulo4/) | Integraciones | Canal email: Gmail + HubSpot + Slack con guardrails (anti auto-reply, Look up, borradores HITL) | ✅ Entregado |
 | [`modulo5/`](modulo5/) | RAG | Manual parseado con LlamaParse + vector store y Worker 3 de búsqueda (Top-K y Minimum Score) | ✅ Entregado |
 | [`modulo6/`](modulo6/) | Voz | Canal de notas de voz en Telegram: Whisper (Groq) + agente RAG + ElevenLabs, con contención de costos y compliance | ✅ Entregado |
+| [`modulo7/`](modulo7/) | Vertical de industria | Informe de consultoría: arquitectura multi-agente, permisos, KPIs, semáforo HITL y scorecards | ✅ Entregado |
 | ... | ... | ... | ... |
 | `final/` | Proyecto Final | Sistema completo supervisado + documentación | Pendiente |
 
