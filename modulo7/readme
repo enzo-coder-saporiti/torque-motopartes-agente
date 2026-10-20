@@ -1,0 +1,26 @@
+# Checkpoint 7 – Diseño arquitectónico de un sistema agéntico vertical
+
+Documento de entrega: [`PreEntrega_Modulo7_EnzoSaporiti.pdf`](PreEntrega_Modulo7_EnzoSaporiti.pdf)
+
+## Resumen
+
+Es un informe de consultoría, 100% no-code, para la vertical **Sales Ops & Customer Success** de Torque Motopartes, un e-commerce de repuestos para moto. No incluye workflows nuevos de n8n: el diseño se apoya en los componentes construidos y probados en los Módulos 1 a 6, y suma dos especialistas nuevos y un auditor de calidad.
+
+| Sección | Contenido |
+|---|---|
+| 1 · Relevamiento | Problema operativo, framework de priorización (impacto, viabilidad no-code y adopción) y baseline: 1.200 consultas por mes, 120 horas y USD 1.200 por mes |
+| 2 · Arquitectura | Diagrama de coreografía multi-agente, ficha de 7 agentes (misión, prompt, herramientas y JSON de salida), mapa de permisos y context engineering |
+| 3 · Valor y riesgo | Propuesta de valor, 8 KPIs con baseline y meta, semáforo verde / amarillo / rojo y protocolo de escalamiento con botones en Slack |
+| 4 · Scorecards | Scorecard de reclamos y devoluciones (10 puntos), scorecard de riesgo de abandono (tags) y versión de portafolio anonimizada |
+
+## Agentes del diseño
+
+| Agente | Estado |
+|---|---|
+| Manager / Router de Triaje | Implementado (Módulo 2) |
+| Agente de Pedidos | Implementado (Módulo 2) |
+| Agente de Conocimiento (RAG) | Implementado (Módulo 5) |
+| Redactor multicanal | Implementado (Módulos 2, 4 y 6) |
+| Agente de Reclamos y Devoluciones | Diseño (fase 2) |
+| Agente de Retención | Diseño (fase 3) |
+| Auditor de Calidad (AI-as-a-Judge) | Diseño (se implementa en el Módulo 8) |
