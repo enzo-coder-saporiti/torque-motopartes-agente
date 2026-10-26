@@ -29,6 +29,7 @@ Cada módulo parte del flujo del módulo anterior y lo extiende. No se rehace de
 | [`modulo5/`](modulo5/) | RAG | Manual parseado con LlamaParse + vector store y Worker 3 de búsqueda (Top-K y Minimum Score) | ✅ Entregado |
 | [`modulo6/`](modulo6/) | Voz | Canal de notas de voz en Telegram: Whisper (Groq) + agente RAG + ElevenLabs, con contención de costos y compliance | ✅ Entregado |
 | [`modulo7/`](modulo7/) | Vertical de industria | Informe de consultoría: arquitectura multi-agente, permisos, KPIs, semáforo HITL y scorecards | ✅ Entregado |
+| [`modulo8/`](modulo8/) | Supervisor QA | Juez AI-as-a-Judge (JSON Schema), Switch de 3 rutas con autocorrección y HITL en Slack, test A/B Haiku vs Sonnet | ✅ Entregado |
 | ... | ... | ... | ... |
 | `final/` | Proyecto Final | Sistema completo supervisado + documentación | Pendiente |
 
