@@ -1,0 +1,1380 @@
+{
+  "name": "Torque – Supervisor QA (M8)",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "692e6194-cf62-40a0-a423-8e35b396589c",
+              "name": "consulta",
+              "value": "={{ $('Caso de prueba').first().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "5a9108b9-ea1b-4376-9102-c27c7646f104",
+              "name": "intencion",
+              "value": "={{ $('Caso de prueba').first().json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "9a6d8ce6-0c65-41dc-b184-f3f8f03bd630",
+              "name": "arquitectura",
+              "value": "={{ $('Caso de prueba').first().json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "bc131f05-5f9b-4be0-9a67-8fa8f75fc8e2",
+              "name": "respuesta_forzada",
+              "value": "={{ $('Caso de prueba').first().json.respuesta_forzada || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "dc293d01-5357-439b-8f79-28bd6fbb8f59",
+              "name": "nombre_cliente",
+              "value": "={{ ($json.fields ?? $json)['Nombre del Cliente'] || 'Cliente sin identificar' }}",
+              "type": "string"
+            },
+            {
+              "id": "e505512f-5ff1-4f6a-9962-ed6f940f4470",
+              "name": "resumen_previo",
+              "value": "={{ ($json.fields ?? $json)['Resumen Consolidado'] || 'Sin conversaciones previas.' }}",
+              "type": "string"
+            },
+            {
+              "id": "90ebe9ac-8b42-47fb-b7a2-56ec7cdf2149",
+              "name": "contexto_airtable",
+              "value": "={{ 'Cliente: ' + (($json.fields ?? $json)['Nombre del Cliente'] || 'sin identificar') + ' | Estado del caso: ' + (($json.fields ?? $json)['Estado del Caso'] || 'NUEVO') + ' | Resumen previo: ' + (($json.fields ?? $json)['Resumen Consolidado'] || 'sin conversaciones previas') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        352,
+        0
+      ],
+      "id": "1576dadf-e87f-480e-957c-870483520f3c",
+      "name": "Datos del caso"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl5kIz6qL52JfCE1",
+          "mode": "list",
+          "cachedResultName": "Memoria_Clientes",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tbl5kIz6qL52JfCE1"
+        },
+        "filterByFormula": "={Session_ID} = '6a754b6e44124b78877a3d8628810032'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        0
+      ],
+      "id": "558e119d-6e9d-4ba1-997d-f0c996cc5f29",
+      "name": "Leer contexto (Airtable)",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Torque · Prueba de QA",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "consulta",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "intencion",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "VENTAS"
+                  },
+                  {
+                    "option": "DEVOLUCIONES_GARANTIAS"
+                  },
+                  {
+                    "option": "PEDIDOS_ENVIOS"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "arquitectura",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "A_Haiku"
+                  },
+                  {
+                    "option": "B_Sonnet"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "respuesta_forzada",
+              "fieldType": "textarea"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "04936262-172c-442e-9a5d-be142e04cc67",
+      "name": "Caso de prueba",
+      "webhookId": "65f036fe-c996-4713-bcf7-0a6c48f4bcf5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "ef562103-24c6-43da-8ed5-17e4af5a3f5c",
+              "leftValue": "={{ $json.respuesta_forzada }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        528,
+        0
+      ],
+      "id": "7db3012f-3931-459b-bf41-f9e6c48f8c42",
+      "name": "¿Prueba de rechazo?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35e4e80d-8025-4851-ab31-02f6f37f02bf",
+              "name": "query",
+              "value": "={{ $json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "cdbfff82-bf93-4dc0-b5fc-dcbf448b44b4",
+              "name": "contexto_airtable",
+              "value": "={{ $json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "5b4cd5a3-eb81-487f-9cc4-61264227e627",
+              "name": "evidencia",
+              "value": "Manual de Políticas v1.0, sección 4.3: si el producto llega con fallas de fábrica, el cliente puede elegir entre reemplazo o reembolso total dentro de los 30 días. La gestión la realiza un asesor.",
+              "type": "string"
+            },
+            {
+              "id": "d0a2f0da-b9ac-49f6-a304-1d89eede7a67",
+              "name": "respuesta_propuesta",
+              "value": "={{ $json.respuesta_forzada }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        -64
+      ],
+      "id": "5b8e5863-5c29-4c18-b9e3-7d76f2c52ce9",
+      "name": "Simular salida del agente"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fdaaa8cc-c77e-4a17-a337-572754e8e627",
+              "name": "consulta",
+              "value": "={{ $json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "c61ed787-d7a3-4bd9-b08e-7c959f2b72f8",
+              "name": "intencion",
+              "value": "={{ $json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "b053f5bb-14d8-49b0-966f-955edbd9a4d6",
+              "name": "arquitectura",
+              "value": "={{ $json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "afa97000-6f95-4d14-abd4-58ec874ae84d",
+              "name": "nombre_cliente",
+              "value": "={{ $json.nombre_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "6ed12fe2-3d0a-415d-9bfa-c7dc6108b815",
+              "name": "resumen_previo",
+              "value": "={{ $json.resumen_previo }}",
+              "type": "string"
+            },
+            {
+              "id": "57976fa3-c544-41f1-899f-3b046e30d78c",
+              "name": "contexto_airtable",
+              "value": "={{ $json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "e7b3f9b0-2510-4e2e-b4b2-b1f79b8a2385",
+              "name": "intento",
+              "value": "={{ $json.intento_siguiente ?? 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "3d0f31cd-38cf-4b7e-b292-0dd4f1dcf7f6",
+              "name": "critica_juez",
+              "value": "={{ $json.critica_juez ?? '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        112
+      ],
+      "id": "57776be3-20e6-4707-b6cb-3cee7616b6f2",
+      "name": "Entrada Agente"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "blrJ08q2rYsOsyMM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/blrJ08q2rYsOsyMM",
+          "cachedResultName": "Torque – Worker 2 Redacción"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "intencion": "={{ $json.intencion }}",
+            "mensaje_cliente": "={{ $json.consulta }}",
+            "resultado_consulta": "={{ {} }}",
+            "nombre_cliente": "={{ $json.nombre_cliente }}",
+            "resumen_previo": "={{ $json.resumen_previo }}",
+            "arquitectura": "={{ $json.arquitectura }}",
+            "critica_juez": "={{ $json.critica_juez }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "intencion",
+              "displayName": "intencion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensaje_cliente",
+              "displayName": "mensaje_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "resultado_consulta",
+              "displayName": "resultado_consulta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "nombre_cliente",
+              "displayName": "nombre_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "resumen_previo",
+              "displayName": "resumen_previo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "arquitectura",
+              "displayName": "arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "critica_juez",
+              "displayName": "critica_juez",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        -240
+      ],
+      "id": "a2e6c4f6-9400-44ba-800b-1f332c50157a",
+      "name": "Delegar al Agente (Worker 2)"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87aa8d25-a0cf-45a4-80de-c992505fbb48",
+              "name": "query",
+              "value": "={{ $('Entrada Agente').last().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "3d9ead3b-7ef1-4288-8ffa-86a8b08bd60c",
+              "name": "contexto_airtable",
+              "value": "={{ $('Entrada Agente').last().json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "05f5c753-8eb4-4063-aa8f-5affc881ad27",
+              "name": "evidencia",
+              "value": "={{ $json.evidencia }}",
+              "type": "string"
+            },
+            {
+              "id": "29c05ab6-868f-45e0-9ea6-890423a428ac",
+              "name": "respuesta_propuesta",
+              "value": "={{ $json.data.respuesta }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        720,
+        -240
+      ],
+      "id": "ba9b4a3d-d922-4d8c-a94c-b36cb2b7578c",
+      "name": "Preparar auditoría"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "FFwYDSoJ5V7wlucn",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/FFwYDSoJ5V7wlucn",
+          "cachedResultName": "Torque – Worker 4 Juez de Calidad"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query": "={{ $json.query }}",
+            "contexto_airtable": "={{ $json.contexto_airtable }}",
+            "evidencia": "={{ $json.evidencia }}",
+            "respuesta_propuesta": "={{ $json.respuesta_propuesta }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "contexto_airtable",
+              "displayName": "contexto_airtable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evidencia",
+              "displayName": "evidencia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "respuesta_propuesta",
+              "displayName": "respuesta_propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        912,
+        -160
+      ],
+      "id": "d1968858-4f74-48a7-a10c-422faa1c1424",
+      "name": "Delegar al Juez (Worker 4)"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "ACEPTADO",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "94afb3f3-f2aa-4718-8224-10a240f5740b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ACEPTADO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "b1f2c5a2-7051-400f-b59e-a02d6c8c0061",
+                    "leftValue": "CORREGIR",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CORREGIR"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "38d2017a-f3f4-4af7-a263-295fe8726ff7",
+                    "leftValue": "RECHAZADO",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "RECHAZADO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        1248,
+        -48
+      ],
+      "id": "4ec170cb-07a2-4249-a647-9c6c332adf38",
+      "name": "Ruta del veredicto"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblLJvGKn4rkS6zD4",
+          "mode": "list",
+          "cachedResultName": "Auditoria_QA",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tblLJvGKn4rkS6zD4"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Trace_ID": "={{ $execution.id }}",
+            "Arquitectura": "={{ $('Datos del caso').first().json.respuesta_forzada ? 'Prueba_Rechazo' : $('Datos del caso').first().json.arquitectura }}",
+            "Intento": "={{ $('Entrada Agente').isExecuted ? $('Entrada Agente').last().json.intento : 1 }}",
+            "Consulta": "={{ $json.query }}",
+            "Respuesta_Propuesta": "={{ $json.respuesta_propuesta }}",
+            "Exactitud_Factual": "={{ $json.exactitud_factual }}",
+            "Estado_Veredicto": "={{ $json.estado_veredicto }}",
+            "Categoria_Error": "={{ $json.categoria_error }}",
+            "Critica": "={{ $json.critica }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Trace_ID",
+              "displayName": "Trace_ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Arquitectura",
+              "displayName": "Arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "A_Haiku",
+                  "value": "A_Haiku"
+                },
+                {
+                  "name": "B_Sonnet",
+                  "value": "B_Sonnet"
+                },
+                {
+                  "name": "Prueba_Rechazo",
+                  "value": "Prueba_Rechazo"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Intento",
+              "displayName": "Intento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Consulta",
+              "displayName": "Consulta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta_Propuesta",
+              "displayName": "Respuesta_Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Exactitud_Factual",
+              "displayName": "Exactitud_Factual",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado_Veredicto",
+              "displayName": "Estado_Veredicto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ACEPTADO",
+                  "value": "ACEPTADO"
+                },
+                {
+                  "name": "CORREGIR",
+                  "value": "CORREGIR"
+                },
+                {
+                  "name": "RECHAZADO",
+                  "value": "RECHAZADO"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categoria_Error",
+              "displayName": "Categoria_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ninguno",
+                  "value": "ninguno"
+                },
+                {
+                  "name": "dato_no_respaldado",
+                  "value": "dato_no_respaldado"
+                },
+                {
+                  "name": "respuesta_incompleta",
+                  "value": "respuesta_incompleta"
+                },
+                {
+                  "name": "sin_cita_de_fuente",
+                  "value": "sin_cita_de_fuente"
+                },
+                {
+                  "name": "regla_de_negocio",
+                  "value": "regla_de_negocio"
+                },
+                {
+                  "name": "formato",
+                  "value": "formato"
+                },
+                {
+                  "name": "falla_del_juez",
+                  "value": "falla_del_juez"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Critica",
+              "displayName": "Critica",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tokens_Entrada",
+              "displayName": "Tokens_Entrada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tokens_Salida",
+              "displayName": "Tokens_Salida",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Costo_USD",
+              "displayName": "Costo_USD",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        -160
+      ],
+      "id": "d952a523-27f7-43b3-bd4f-b4429fb8cef7",
+      "name": "Registrar veredicto (Airtable)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "7f7aba74-147a-47b5-b4dd-15ac1c9ebe38",
+              "leftValue": "={{ $('Entrada Agente').isExecuted ? $('Entrada Agente').last().json.intento : 99 }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1440,
+        -48
+      ],
+      "id": "75bbc664-97b4-4926-acc6-5c47e2c1e3b9",
+      "name": "¿Quedan reintentos?"
+    },
+    {
+      "parameters": {
+        "chatId": "404312683",
+        "text": "={{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1456,
+        -240
+      ],
+      "id": "40e1b16c-9ce2-4e20-8860-a37e4ec5fc1c",
+      "name": "Enviar al cliente",
+      "webhookId": "a764d971-5ac8-45ea-a1b7-850d6cdf7d7c",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "017f469e-9bab-4c81-85d6-145b1c85f664",
+              "name": "consulta",
+              "value": "={{ $('Entrada Agente').last().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "62677ab4-500e-4e7c-8086-7f853516f532",
+              "name": "intencion",
+              "value": "={{ $('Entrada Agente').last().json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "4fcf29f9-38d3-4915-8b02-428163b4f88e",
+              "name": "arquitectura",
+              "value": "={{ $('Entrada Agente').last().json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "9ac35706-9769-446e-9a48-d0945f63c425",
+              "name": "nombre_cliente",
+              "value": "={{ $('Entrada Agente').last().json.nombre_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "efcbba2c-0a12-454f-8d5e-89b158dac7b6",
+              "name": "resumen_previo",
+              "value": "={{ $('Entrada Agente').last().json.resumen_previo }}",
+              "type": "string"
+            },
+            {
+              "id": "5b99ad5c-4072-4d85-b0a8-c9874ee31cc8",
+              "name": "contexto_airtable",
+              "value": "={{ $('Entrada Agente').last().json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "83c7e7c3-05ed-4e98-a4be-de36c8dc7fab",
+              "name": "intento_siguiente",
+              "value": "={{ $('Entrada Agente').last().json.intento + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "2b350ba5-5562-4ca9-9398-d8273b5b6d25",
+              "name": "critica_juez",
+              "value": "={{ $('Delegar al Juez (Worker 4)').last().json.critica }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1648,
+        -96
+      ],
+      "id": "973a870f-5709-4a8f-8c2e-71f3f1fba6e1",
+      "name": "Reintento con crítica"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "message": "=🔴 *Respuesta retenida por el Auditor de Calidad* | Ejecución {{ $execution.id }}\n*Consulta:* {{ $('Delegar al Juez (Worker 4)').last().json.query }}\n*Respuesta propuesta:* {{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}\n*Veredicto:* {{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }} · exactitud {{ $('Delegar al Juez (Worker 4)').last().json.exactitud_factual }}/5 · {{ $('Delegar al Juez (Worker 4)').last().json.categoria_error }}\n*Crítica:* {{ $('Delegar al Juez (Worker 4)').last().json.critica }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Aprobar",
+            "disapproveLabel": "Editar"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 4
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1552,
+        176
+      ],
+      "id": "0d2fbe8d-f5fe-4b12-8228-cdcc3fea98d4",
+      "name": "Escalar a humano (Aprobar/Editar)",
+      "webhookId": "24f99b66-3689-4174-a199-5ccc24d9370e",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "b0333bf4-31aa-4da3-b164-1aafef5ce1dd",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1696,
+        176
+      ],
+      "id": "7cf2b73d-7070-4fca-883f-33f09772b68a",
+      "name": "¿Aprobó?"
+    },
+    {
+      "parameters": {
+        "chatId": "404312683",
+        "text": "={{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1872,
+        64
+      ],
+      "id": "6a1ed6a8-cb5b-4cbd-bcbe-f03b18905fde",
+      "name": "Enviar versión aprobada",
+      "webhookId": "78d00321-3708-449c-8f9f-40f4206e0b3b",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "message": "Escribí la respuesta corregida para el cliente.",
+        "responseType": "freeText",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1872,
+        272
+      ],
+      "id": "e4f1f28c-92fa-446f-9e59-ffaabc5e3c31",
+      "name": "Pedir texto corregido",
+      "webhookId": "7d39f4fe-fd27-4e24-bc5a-8d01b7e8bc30",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "404312683",
+        "text": "={{ $json.data.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2064,
+        272
+      ],
+      "id": "dcb9127e-9b8f-4b92-920b-96bbadb8c8bf",
+      "name": "Enviar versión editada",
+      "webhookId": "6e2f23a9-4bad-44a4-b283-1e34976d6759",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Datos del caso": {
+      "main": [
+        [
+          {
+            "node": "¿Prueba de rechazo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer contexto (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Datos del caso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Caso de prueba": {
+      "main": [
+        [
+          {
+            "node": "Leer contexto (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Prueba de rechazo?": {
+      "main": [
+        [
+          {
+            "node": "Simular salida del agente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Entrada Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar al Agente (Worker 2)": {
+      "main": [
+        [
+          {
+            "node": "Preparar auditoría",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar auditoría": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Juez (Worker 4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simular salida del agente": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Juez (Worker 4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar al Juez (Worker 4)": {
+      "main": [
+        [
+          {
+            "node": "Registrar veredicto (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar veredicto (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Ruta del veredicto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ruta del veredicto": {
+      "main": [
+        [
+          {
+            "node": "Enviar al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Quedan reintentos?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Quedan reintentos?": {
+      "main": [
+        [
+          {
+            "node": "Reintento con crítica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reintento con crítica": {
+      "main": [
+        [
+          {
+            "node": "Entrada Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar a humano (Aprobar/Editar)": {
+      "main": [
+        [
+          {
+            "node": "¿Aprobó?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Aprobó?": {
+      "main": [
+        [
+          {
+            "node": "Enviar versión aprobada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pedir texto corregido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir texto corregido": {
+      "main": [
+        [
+          {
+            "node": "Enviar versión editada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entrada Agente": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Agente (Worker 2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a861af5d-6fba-4e4b-a1dd-9774ad9dbeea",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "FoWd26FTFrhXhgQa",
+  "tags": []
+}
