@@ -29,10 +29,14 @@ Documento de entrega: [`Checkpoint_Modulo8_Saporiti_Enzo.pdf`](Checkpoint_Modulo
 
 | Indicador | A · Haiku 4.5 | B · Sonnet 4.5 |
 |---|---|---|
-| Exactitud media del intento 1 | 4,2 | 4,0 |
-| Resueltos sin humano | 4/5 | 4/5 |
-| Costo medio del agente por caso | USD 0,0056 | USD 0,0133 |
-| Costo de IA cada 1.000 casos (agente + Juez) | USD 18,87 | USD 24,64 |
+| Precisión vs. ground truth (intento 1 → entregada) | 60% → 80% | 60% → 80% |
+| Errores enviados al cliente sin revisión | 0 | 1 |
+| HITL Rate | 20% | 20% |
+| Tokens promedio del agente por caso | 4.702 | 3.703 |
+| Costo por ejecución (agente + Juez) | USD 0,0189 | USD 0,0246 |
+| Costo cada 1.000 ejecuciones | USD 18,87 | USD 24,64 |
+
+Umbrales por criticidad: ≥ 4 en consultas informativas; exactitud 5 en devoluciones, reembolsos y datos sensibles; las acciones de escritura requieren siempre aprobación humana.
 
 **Recomendación:** Arquitectura A, más controles deterministas en el Juez para las reglas literales. El detalle está en el PDF.
 
