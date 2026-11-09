@@ -1,0 +1,197 @@
+{
+  "name": "Torque – Simulador de Cliente",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "17b63cf5-02e5-456a-80ad-13f4af175730",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b65ddce-279c-485c-8a51-e27d2c9ff5aa",
+              "name": "requestId",
+              "value": "={{ 'req-' + $now.toFormat('yyyyMMdd-HHmmss') }}",
+              "type": "string"
+            },
+            {
+              "id": "477dc0e3-82a1-4713-9694-55e570de521e",
+              "name": "session_id",
+              "value": "6a754b6e44124b78877a3d8628810032",
+              "type": "string"
+            },
+            {
+              "id": "b5ed6334-5911-4cbb-aae3-017f69e0822c",
+              "name": "chat_id",
+              "value": "404312683",
+              "type": "string"
+            },
+            {
+              "id": "62ed4de9-8049-43b4-99cc-518d21b5d939",
+              "name": "email",
+              "value": "cliente-a@example.com",
+              "type": "string"
+            },
+            {
+              "id": "d3ee6d00-91fb-4e96-9d07-3df7f1e1a97b",
+              "name": "consulta",
+              "value": "¿Cuánto tarda en llegar un paquete a Mendoza?",
+              "type": "string"
+            },
+            {
+              "id": "2f110808-b0bc-438c-ae3a-c2ed0ef3a07d",
+              "name": "intencion",
+              "value": "VENTAS",
+              "type": "string"
+            },
+            {
+              "id": "f3413563-995c-4d9f-9c1c-657a2d1aa45d",
+              "name": "arquitectura",
+              "value": "A_Haiku",
+              "type": "string"
+            },
+            {
+              "id": "9a95edb3-8b53-4fc4-b0ab-1954aaacb515",
+              "name": "respuesta_forzada",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        176,
+        0
+      ],
+      "id": "b189b5fb-5c0b-4588-b909-133920357bfc",
+      "name": "Solicitud de prueba"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://enzocoderai.app.n8n.cloud/webhook/torque-consulta",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Solicitud de prueba').first().json) }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        352,
+        0
+      ],
+      "id": "a426f504-d394-41d8-9ae9-9952f11630a7",
+      "name": "1) Enviar solicitud",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UUX8NeHHkoa2j0jE",
+          "name": "Torque Webhook Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://enzocoderai.app.n8n.cloud/webhook/torque-consulta",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('Solicitud de prueba').first().json) }}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          },
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        576,
+        0
+      ],
+      "id": "d0826735-91a8-4225-b216-b66ed7b05661",
+      "name": "2) Reenviar la misma solicitud",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UUX8NeHHkoa2j0jE",
+          "name": "Torque Webhook Key"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Solicitud de prueba",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Solicitud de prueba": {
+      "main": [
+        [
+          {
+            "node": "1) Enviar solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1) Enviar solicitud": {
+      "main": [
+        [
+          {
+            "node": "2) Reenviar la misma solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "60a5f500-b2fb-4d5b-bd3f-1b8f5b166f43",
+  "meta": {
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "oajIPlcFHBB5BGPG",
+  "tags": []
+}

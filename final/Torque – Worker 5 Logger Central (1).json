@@ -1,0 +1,302 @@
+{
+  "name": "Torque – Worker 5 Logger Central",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "traceId"
+            },
+            {
+              "name": "workflow"
+            },
+            {
+              "name": "nodeName"
+            },
+            {
+              "name": "evento"
+            },
+            {
+              "name": "status"
+            },
+            {
+              "name": "toolOutput"
+            },
+            {
+              "name": "systemPromptSnapshot"
+            },
+            {
+              "name": "confidenceScore",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2ed1b230-dcb8-4123-874b-02825493726a",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "155a0553-c949-4e78-96f0-9771ffddffc9",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "144e576a-fdc8-452b-8760-5dc533327b91",
+              "name": "toolOutput",
+              "value": "={{ String($json.toolOutput || '').slice(0, 1500) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        176,
+        0
+      ],
+      "id": "dd2bb60d-f534-4f59-809c-52caa7f7ab4b",
+      "name": "Normalizar log"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl4CvChNOxtFu2iq",
+          "mode": "list",
+          "cachedResultName": "Logs_Trazabilidad",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tbl4CvChNOxtFu2iq"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $json.traceId }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "workflow": "={{ $json.workflow }}",
+            "nodeName": "={{ $json.nodeName }}",
+            "evento": "={{ $json.evento }}",
+            "status": "={{ $json.status }}",
+            "toolOutput": "={{ $json.toolOutput }}",
+            "systemPromptSnapshot": "={{ $json.systemPromptSnapshot }}",
+            "confidenceScore": "={{ $json.confidenceScore ?? '' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "inicio_caso",
+                  "value": "inicio_caso"
+                },
+                {
+                  "name": "recuperacion_rag",
+                  "value": "recuperacion_rag"
+                },
+                {
+                  "name": "respuesta_agente",
+                  "value": "respuesta_agente"
+                },
+                {
+                  "name": "veredicto_juez",
+                  "value": "veredicto_juez"
+                },
+                {
+                  "name": "envio_automatico",
+                  "value": "envio_automatico"
+                },
+                {
+                  "name": "hitl_aprobado",
+                  "value": "hitl_aprobado"
+                },
+                {
+                  "name": "hitl_editado",
+                  "value": "hitl_editado"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        336,
+        0
+      ],
+      "id": "12ace17b-e405-4689-9197-9c93775abf6e",
+      "name": "Guardar log",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Normalizar log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar log": {
+      "main": [
+        [
+          {
+            "node": "Guardar log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionTimeout": 20,
+    "availableInMCP": false
+  },
+  "versionId": "cc5f08a9-226b-4d5e-9bb5-fe24c9f81367",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "3PUduI5Gavadv9Zy",
+  "tags": []
+}

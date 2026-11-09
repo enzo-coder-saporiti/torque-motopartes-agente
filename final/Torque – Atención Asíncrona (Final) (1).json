@@ -1,0 +1,3436 @@
+{
+  "name": "Torque – Atención Asíncrona (Final)",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "692e6194-cf62-40a0-a423-8e35b396589c",
+              "name": "consulta",
+              "value": "={{ $('Normalizar entrada').first().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "5a9108b9-ea1b-4376-9102-c27c7646f104",
+              "name": "intencion",
+              "value": "={{ $('Normalizar entrada').first().json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "9a6d8ce6-0c65-41dc-b184-f3f8f03bd630",
+              "name": "arquitectura",
+              "value": "={{ $('Normalizar entrada').first().json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "bc131f05-5f9b-4be0-9a67-8fa8f75fc8e2",
+              "name": "respuesta_forzada",
+              "value": "={{ $('Normalizar entrada').first().json.respuesta_forzada || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "dc293d01-5357-439b-8f79-28bd6fbb8f59",
+              "name": "nombre_cliente",
+              "value": "={{ ($json.fields ?? $json)['Nombre del Cliente'] || 'Cliente sin identificar' }}",
+              "type": "string"
+            },
+            {
+              "id": "e505512f-5ff1-4f6a-9962-ed6f940f4470",
+              "name": "resumen_previo",
+              "value": "={{ ($json.fields ?? $json)['Resumen Consolidado'] || 'Sin conversaciones previas.' }}",
+              "type": "string"
+            },
+            {
+              "id": "90ebe9ac-8b42-47fb-b7a2-56ec7cdf2149",
+              "name": "contexto_airtable",
+              "value": "={{ 'Cliente: ' + (($json.fields ?? $json)['Nombre del Cliente'] || 'sin identificar') + ' | Estado del caso: ' + (($json.fields ?? $json)['Estado del Caso'] || 'NUEVO') + ' | Resumen previo: ' + (($json.fields ?? $json)['Resumen Consolidado'] || 'sin conversaciones previas') }}",
+              "type": "string"
+            },
+            {
+              "id": "3b75ddff-65a1-4389-8c5b-96a4aa779b59",
+              "name": "traceId",
+              "value": "={{ $('Normalizar entrada').first().json.traceId }}",
+              "type": "string"
+            },
+            {
+              "id": "d3b0b826-d59e-48c0-8142-a195528250e4",
+              "name": "email",
+              "value": "={{ $('Normalizar entrada').first().json.email || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "f04432e6-a615-49f4-8079-6c5929950555",
+              "name": "chat_id",
+              "value": "={{ $('Normalizar entrada').first().json.chat_id }}",
+              "type": "string"
+            },
+            {
+              "id": "6ca1da37-19e0-44ed-88bc-f35eaf078f88",
+              "name": "requestId",
+              "value": "={{ $('Normalizar entrada').first().json.requestId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        352,
+        0
+      ],
+      "id": "c2b4f636-9480-4d3e-ae18-ecf4e120ec6f",
+      "name": "Datos del caso"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl5kIz6qL52JfCE1",
+          "mode": "list",
+          "cachedResultName": "Memoria_Clientes",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tbl5kIz6qL52JfCE1"
+        },
+        "filterByFormula": "={Session_ID} = '{{ $('Normalizar entrada').first().json.session_id }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        0
+      ],
+      "id": "062d67e8-0b47-4d08-8080-8fed2baa5ebc",
+      "name": "Leer contexto (Airtable)",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "ef562103-24c6-43da-8ed5-17e4af5a3f5c",
+              "leftValue": "={{ $json.respuesta_forzada }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        656,
+        0
+      ],
+      "id": "4f071885-7d0b-4be4-8673-d5b6ffc2d664",
+      "name": "¿Prueba de rechazo?"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "35e4e80d-8025-4851-ab31-02f6f37f02bf",
+              "name": "query",
+              "value": "={{ $json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "cdbfff82-bf93-4dc0-b5fc-dcbf448b44b4",
+              "name": "contexto_airtable",
+              "value": "={{ $json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "5b4cd5a3-eb81-487f-9cc4-61264227e627",
+              "name": "evidencia",
+              "value": "Manual de Políticas v1.0, sección 4.3: si el producto llega con fallas de fábrica, el cliente puede elegir entre reemplazo o reembolso total dentro de los 30 días. La gestión la realiza un asesor.",
+              "type": "string"
+            },
+            {
+              "id": "d0a2f0da-b9ac-49f6-a304-1d89eede7a67",
+              "name": "respuesta_propuesta",
+              "value": "={{ $json.respuesta_forzada }}",
+              "type": "string"
+            },
+            {
+              "id": "2ca66678-f561-4216-90fd-3c6387b24706",
+              "name": "traceId",
+              "value": "={{ $json.traceId }}",
+              "type": "string"
+            },
+            {
+              "id": "0c7d6634-b638-4689-a688-0500c3f8b1cc",
+              "name": "intencion",
+              "value": "={{ $json.intencion }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        848,
+        -64
+      ],
+      "id": "8e10d924-b23c-4dba-8e84-5e4112966e3a",
+      "name": "Simular salida del agente"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fdaaa8cc-c77e-4a17-a337-572754e8e627",
+              "name": "consulta",
+              "value": "={{ $json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "c61ed787-d7a3-4bd9-b08e-7c959f2b72f8",
+              "name": "intencion",
+              "value": "={{ $json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "b053f5bb-14d8-49b0-966f-955edbd9a4d6",
+              "name": "arquitectura",
+              "value": "={{ $json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "afa97000-6f95-4d14-abd4-58ec874ae84d",
+              "name": "nombre_cliente",
+              "value": "={{ $json.nombre_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "6ed12fe2-3d0a-415d-9bfa-c7dc6108b815",
+              "name": "resumen_previo",
+              "value": "={{ $json.resumen_previo }}",
+              "type": "string"
+            },
+            {
+              "id": "57976fa3-c544-41f1-899f-3b046e30d78c",
+              "name": "contexto_airtable",
+              "value": "={{ $json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "e7b3f9b0-2510-4e2e-b4b2-b1f79b8a2385",
+              "name": "intento",
+              "value": "={{ $json.intento_siguiente ?? 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "3d0f31cd-38cf-4b7e-b292-0dd4f1dcf7f6",
+              "name": "critica_juez",
+              "value": "={{ $json.critica_juez ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "e543e6a8-ec6f-469c-af52-074d5ab43244",
+              "name": "traceId",
+              "value": "={{ $json.traceId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1056,
+        112
+      ],
+      "id": "5d23f4b1-b3c3-4329-b3f0-37099ff03dd8",
+      "name": "Entrada Agente"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "blrJ08q2rYsOsyMM",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/blrJ08q2rYsOsyMM",
+          "cachedResultName": "Torque – Worker 2 Redacción"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "intencion": "={{ $json.intencion }}",
+            "mensaje_cliente": "={{ $json.consulta }}",
+            "resultado_consulta": "={{ {} }}",
+            "nombre_cliente": "={{ $json.nombre_cliente }}",
+            "resumen_previo": "={{ $json.resumen_previo }}",
+            "arquitectura": "={{ $json.arquitectura }}",
+            "critica_juez": "={{ $json.critica_juez }}",
+            "traceId": "={{ $json.traceId }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "intencion",
+              "displayName": "intencion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mensaje_cliente",
+              "displayName": "mensaje_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "resultado_consulta",
+              "displayName": "resultado_consulta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "nombre_cliente",
+              "displayName": "nombre_cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "resumen_previo",
+              "displayName": "resumen_previo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "arquitectura",
+              "displayName": "arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "critica_juez",
+              "displayName": "critica_juez",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        176,
+        -224
+      ],
+      "id": "2d9fc719-d046-4933-90be-3d6ca60060ec",
+      "name": "Delegar al Agente (Worker 2)",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "87aa8d25-a0cf-45a4-80de-c992505fbb48",
+              "name": "query",
+              "value": "={{ $('Entrada Agente').last().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "3d9ead3b-7ef1-4288-8ffa-86a8b08bd60c",
+              "name": "contexto_airtable",
+              "value": "={{ $('Entrada Agente').last().json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "05f5c753-8eb4-4063-aa8f-5affc881ad27",
+              "name": "evidencia",
+              "value": "={{ $json.evidencia }}",
+              "type": "string"
+            },
+            {
+              "id": "29c05ab6-868f-45e0-9ea6-890423a428ac",
+              "name": "respuesta_propuesta",
+              "value": "={{ $json.data.respuesta }}",
+              "type": "string"
+            },
+            {
+              "id": "cf135616-c896-49be-a33c-60bb0665eed5",
+              "name": "traceId",
+              "value": "={{ $('Entrada Agente').last().json.traceId }}",
+              "type": "string"
+            },
+            {
+              "id": "17f0a543-ef2a-449e-8b38-f07582d5b825",
+              "name": "intencion",
+              "value": "={{ $('Entrada Agente').last().json.intencion }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        848,
+        -240
+      ],
+      "id": "4610afc8-f210-4658-a220-de9fab5d3e77",
+      "name": "Preparar auditoría"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "FFwYDSoJ5V7wlucn",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/FFwYDSoJ5V7wlucn",
+          "cachedResultName": "Torque – Worker 4 Juez de Calidad"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "query": "={{ $json.query }}",
+            "contexto_airtable": "={{ $json.contexto_airtable }}",
+            "evidencia": "={{ $json.evidencia }}",
+            "respuesta_propuesta": "={{ $json.respuesta_propuesta }}",
+            "intencion": "={{ $json.intencion }}",
+            "traceId": "={{ $json.traceId }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "query",
+              "displayName": "query",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contexto_airtable",
+              "displayName": "contexto_airtable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "evidencia",
+              "displayName": "evidencia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "respuesta_propuesta",
+              "displayName": "respuesta_propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "intencion",
+              "displayName": "intencion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        1024,
+        -160
+      ],
+      "id": "7a5d35b6-1251-43f3-9d2c-152a81b0991e",
+      "name": "Delegar al Juez (Worker 4)",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "ACEPTADO",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "94afb3f3-f2aa-4718-8224-10a240f5740b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ACEPTADO"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "b1f2c5a2-7051-400f-b59e-a02d6c8c0061",
+                    "leftValue": "CORREGIR",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "CORREGIR"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "38d2017a-f3f4-4af7-a263-295fe8726ff7",
+                    "leftValue": "RECHAZADO",
+                    "rightValue": "={{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "RECHAZADO"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        1408,
+        -208
+      ],
+      "id": "d2f310f7-697b-43b3-a70a-e41d4c6a2791",
+      "name": "Ruta del veredicto"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblLJvGKn4rkS6zD4",
+          "mode": "list",
+          "cachedResultName": "Auditoria_QA",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tblLJvGKn4rkS6zD4"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Arquitectura": "={{ $('Datos del caso').first().json.respuesta_forzada ? 'Prueba_Rechazo' : $('Datos del caso').first().json.arquitectura }}",
+            "Intento": "={{ $('Entrada Agente').isExecuted ? $('Entrada Agente').last().json.intento : 1 }}",
+            "Consulta": "={{ $json.query }}",
+            "Respuesta_Propuesta": "={{ $json.respuesta_propuesta }}",
+            "Exactitud_Factual": "={{ $json.exactitud_factual }}",
+            "Estado_Veredicto": "={{ $json.estado_veredicto }}",
+            "Categoria_Error": "={{ $json.categoria_error }}",
+            "Critica": "={{ $json.critica }}",
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "Lote": "Final – asíncrono",
+            "executionId": "={{ $execution.id }}",
+            "Clave": "={{ $('Datos del caso').first().json.traceId + '-i' + ($('Entrada Agente').isExecuted ? $('Entrada Agente').last().json.intento : 1) }}"
+          },
+          "matchingColumns": [
+            "Clave"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "executionId",
+              "displayName": "executionId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha",
+              "displayName": "Fecha",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Arquitectura",
+              "displayName": "Arquitectura",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "A_Haiku",
+                  "value": "A_Haiku"
+                },
+                {
+                  "name": "B_Sonnet",
+                  "value": "B_Sonnet"
+                },
+                {
+                  "name": "Prueba_Rechazo",
+                  "value": "Prueba_Rechazo"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Intento",
+              "displayName": "Intento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Consulta",
+              "displayName": "Consulta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Respuesta_Propuesta",
+              "displayName": "Respuesta_Propuesta",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Exactitud_Factual",
+              "displayName": "Exactitud_Factual",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado_Veredicto",
+              "displayName": "Estado_Veredicto",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ACEPTADO",
+                  "value": "ACEPTADO"
+                },
+                {
+                  "name": "CORREGIR",
+                  "value": "CORREGIR"
+                },
+                {
+                  "name": "RECHAZADO",
+                  "value": "RECHAZADO"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categoria_Error",
+              "displayName": "Categoria_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "ninguno",
+                  "value": "ninguno"
+                },
+                {
+                  "name": "dato_no_respaldado",
+                  "value": "dato_no_respaldado"
+                },
+                {
+                  "name": "respuesta_incompleta",
+                  "value": "respuesta_incompleta"
+                },
+                {
+                  "name": "sin_cita_de_fuente",
+                  "value": "sin_cita_de_fuente"
+                },
+                {
+                  "name": "regla_de_negocio",
+                  "value": "regla_de_negocio"
+                },
+                {
+                  "name": "formato",
+                  "value": "formato"
+                },
+                {
+                  "name": "falla_del_juez",
+                  "value": "falla_del_juez"
+                },
+                {
+                  "name": "falla_de_herramienta",
+                  "value": "falla_de_herramienta"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Critica",
+              "displayName": "Critica",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tokens_Entrada",
+              "displayName": "Tokens_Entrada",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tokens_Salida",
+              "displayName": "Tokens_Salida",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Costo_USD",
+              "displayName": "Costo_USD",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Lote",
+              "displayName": "Lote",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Es_Aceptado",
+              "displayName": "Es_Aceptado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Es_HITL",
+              "displayName": "Es_HITL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Clave",
+              "displayName": "Clave",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        -176
+      ],
+      "id": "2f8e533c-d509-4362-b90f-f1728e274d87",
+      "name": "Registrar veredicto (Airtable)",
+      "retryOnFail": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "7f7aba74-147a-47b5-b4dd-15ac1c9ebe38",
+              "leftValue": "={{ $('Entrada Agente').isExecuted ? $('Entrada Agente').last().json.intento : 99 }}",
+              "rightValue": 2,
+              "operator": {
+                "type": "number",
+                "operation": "lt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        1632,
+        -144
+      ],
+      "id": "ec4bf01d-98bb-44d7-bc42-b70c3654b949",
+      "name": "¿Quedan reintentos?"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del caso').first().json.chat_id }}",
+        "text": "={{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2480,
+        -256
+      ],
+      "id": "d5d0e1ed-5393-4e3b-92fe-c2325ee8f249",
+      "name": "Enviar al cliente",
+      "webhookId": "06f5e57e-03c1-4f52-901a-888a934fc8c4",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "017f469e-9bab-4c81-85d6-145b1c85f664",
+              "name": "consulta",
+              "value": "={{ $('Entrada Agente').last().json.consulta }}",
+              "type": "string"
+            },
+            {
+              "id": "62677ab4-500e-4e7c-8086-7f853516f532",
+              "name": "intencion",
+              "value": "={{ $('Entrada Agente').last().json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "4fcf29f9-38d3-4915-8b02-428163b4f88e",
+              "name": "arquitectura",
+              "value": "={{ $('Entrada Agente').last().json.arquitectura }}",
+              "type": "string"
+            },
+            {
+              "id": "9ac35706-9769-446e-9a48-d0945f63c425",
+              "name": "nombre_cliente",
+              "value": "={{ $('Entrada Agente').last().json.nombre_cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "efcbba2c-0a12-454f-8d5e-89b158dac7b6",
+              "name": "resumen_previo",
+              "value": "={{ $('Entrada Agente').last().json.resumen_previo }}",
+              "type": "string"
+            },
+            {
+              "id": "5b99ad5c-4072-4d85-b0a8-c9874ee31cc8",
+              "name": "contexto_airtable",
+              "value": "={{ $('Entrada Agente').last().json.contexto_airtable }}",
+              "type": "string"
+            },
+            {
+              "id": "83c7e7c3-05ed-4e98-a4be-de36c8dc7fab",
+              "name": "intento_siguiente",
+              "value": "={{ $('Entrada Agente').last().json.intento + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "2b350ba5-5562-4ca9-9398-d8273b5b6d25",
+              "name": "critica_juez",
+              "value": "={{ $('Delegar al Juez (Worker 4)').last().json.critica }}",
+              "type": "string"
+            },
+            {
+              "id": "98e463b5-3405-4153-893a-942623d09573",
+              "name": "traceId",
+              "value": "={{ $('Entrada Agente').last().json.traceId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1856,
+        -160
+      ],
+      "id": "6a49a7b4-bf4b-4fd6-8387-74a4aa1950a5",
+      "name": "Reintento con crítica"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "message": "=🔴 *traceId:* {{ $('Datos del caso').first().json.traceId }}\n*Respuesta retenida por el Auditor de Calidad* | Ejecución {{ $execution.id }}\n*Consulta:* {{ $('Delegar al Juez (Worker 4)').last().json.query }}\n*Respuesta propuesta:* {{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}\n*Veredicto:* {{ $('Delegar al Juez (Worker 4)').last().json.estado_veredicto }} · exactitud {{ $('Delegar al Juez (Worker 4)').last().json.exactitud_factual }}/5 · {{ $('Delegar al Juez (Worker 4)').last().json.categoria_error }}\n*Crítica:* {{ $('Delegar al Juez (Worker 4)').last().json.critica }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Aprobar",
+            "disapproveLabel": "Editar"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 4
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1664,
+        160
+      ],
+      "id": "09d01c45-1898-432e-8522-104fa0c506c0",
+      "name": "Escalar a humano (Aprobar/Editar)",
+      "webhookId": "17a02467-1ba1-4901-93eb-d7c1a3bcba3c",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del caso').first().json.chat_id }}",
+        "text": "={{ $('Delegar al Juez (Worker 4)').last().json.respuesta_propuesta }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2480,
+        -48
+      ],
+      "id": "8c9121de-3db0-40a9-bc44-e02264d41242",
+      "name": "Enviar versión aprobada",
+      "webhookId": "92d2a52a-4228-4ae6-86a0-b3d94abb002a",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "message": "=✏️ traceId {{ $('Datos del caso').first().json.traceId }} · Escribí la respuesta corregida para el cliente (tenés 4 h; si no, se envía el aviso de derivación).",
+        "responseType": "freeText",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 4
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        2112,
+        240
+      ],
+      "id": "0923fb06-cbf8-4d80-8214-805210e0f548",
+      "name": "Pedir texto corregido",
+      "webhookId": "824e0b61-a760-4b4d-a66e-fa7a6eeabfbf",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del caso').first().json.chat_id }}",
+        "text": "={{ $json.data.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2480,
+        224
+      ],
+      "id": "3cac4911-f471-498c-ac85-21c669234857",
+      "name": "Enviar versión editada",
+      "webhookId": "b8112248-7328-4e7c-882d-cf9f1ccf647f",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Webhook (entrada)",
+            "evento": "inicio_caso",
+            "status": "ok",
+            "toolOutput": "={{ $json.consulta }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        512,
+        0
+      ],
+      "id": "61ed43e2-78e8-476d-a9cc-9dab65ae3170",
+      "name": "Log: inicio"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Enviar al cliente",
+            "evento": "envio_automatico",
+            "status": "enviado",
+            "toolOutput": "={{ $json.result?.text || '' }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        2672,
+        -272
+      ],
+      "id": "b9103aaf-5f09-4fc3-a295-261b13424da2",
+      "name": "Log: decisión final"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Enviar versión aprobada",
+            "evento": "hitl_aprobado",
+            "status": "enviado",
+            "toolOutput": "={{ $json.result?.text || '' }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        2672,
+        -64
+      ],
+      "id": "fd0bf184-cf25-4012-aa97-00d02813b64c",
+      "name": "Log: hitl aprobado"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Enviar versión editada",
+            "evento": "hitl_editado",
+            "status": "enviado",
+            "toolOutput": "={{ $json.result?.text || '' }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        2688,
+        112
+      ],
+      "id": "b8df48c9-9631-4635-bca5-e7a5cb4a6ca5",
+      "name": "Log: hitl editado"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "74515db8-95d5-447e-9df7-eef4b8d1037c",
+              "name": "email",
+              "value": "={{ $('Datos del caso').first().json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "9f40d9ff-6be4-4968-ab6b-ae3da9c24f54",
+              "name": "traceId",
+              "value": "={{ $('Datos del caso').first().json.traceId }}",
+              "type": "string"
+            },
+            {
+              "id": "a7c2b608-e82e-4bb2-aa21-72763212d43f",
+              "name": "intencion",
+              "value": "={{ $('Datos del caso').first().json.intencion }}",
+              "type": "string"
+            },
+            {
+              "id": "e514a2d9-fc05-4a4b-960a-c8618c3b0c3d",
+              "name": "validacion",
+              "value": "={{ $('Enviar versión editada').isExecuted ? 'HITL_EDITADO' : ($('Enviar versión aprobada').isExecuted ? 'HITL_APROBADO' : 'JUEZ_ACEPTADO') }}",
+              "type": "string"
+            },
+            {
+              "id": "253441eb-d7e2-49ec-8029-fa7327be02e7",
+              "name": "fecha_interaccion",
+              "value": "={{ DateTime.fromISO($now.setZone('America/Argentina/Buenos_Aires').toISODate(), { zone: 'utc' }).toMillis() }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2848,
+        -64
+      ],
+      "id": "2fbacd40-29a9-45e8-8dca-a26531f82eab",
+      "name": "Datos para CRM"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "e1c232b0-2ddc-4256-a8c6-62db75ad3545",
+              "leftValue": "={{ $json.email }}",
+              "rightValue": "@",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        2992,
+        -64
+      ],
+      "id": "b63f7bde-3596-41ce-92b5-e7540d5be6aa",
+      "name": "¿Tiene email?"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "email": "={{ $json.email }}",
+        "additionalFields": {
+          "customPropertiesUi": {
+            "customPropertiesValues": [
+              {
+                "property": "torque_origen",
+                "value": "agente_torque"
+              },
+              {
+                "property": "torque_ultimo_traceid",
+                "value": "={{ $json.traceId }}"
+              },
+              {
+                "property": "torque_validacion",
+                "value": "={{ $json.validacion }}"
+              },
+              {
+                "property": "torque_intencion",
+                "value": "={{ $json.intencion }}"
+              },
+              {
+                "property": "torque_ultima_interaccion",
+                "value": "={{ $json.fecha_interaccion }}"
+              }
+            ]
+          },
+          "leadStatus": "IN_PROGRESS"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        3216,
+        -80
+      ],
+      "id": "79ce23d9-c8c3-467e-80e2-3f2530279d6c",
+      "name": "Registrar en CRM (HubSpot)",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000,
+      "credentials": {
+        "hubspotOAuth2Api": {
+          "id": "SjU2nYETppkwXOe7",
+          "name": "HubSpot Torque"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos para CRM').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Registrar en CRM (HubSpot)",
+            "evento": "crm_registrado",
+            "status": "ok",
+            "toolOutput": "={{ JSON.stringify({ origen: 'agente_torque', validacion: $('Datos para CRM').first().json.validacion }) }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        3408,
+        -192
+      ],
+      "id": "c7f3e402-4868-4a50-b798-0ac4b61bb4b0",
+      "name": "Log: CRM registrado"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-ops-logs",
+          "mode": "name"
+        },
+        "text": "=🚨 *HubSpot no respondió tras 3 intentos* · traceId {{ $('Datos para CRM').first().json.traceId }}\nLa respuesta ya llegó al cliente; falta registrar el contacto.\n*Responsable:* Analista de Operaciones (reintentar a mano; la operación no duplica).",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        3408,
+        -16
+      ],
+      "id": "474dcaf4-eb39-4133-b258-34bbd387e650",
+      "name": "Alerta: falla CRM",
+      "webhookId": "873a57e7-3eb6-4a70-81f6-624531e66090",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "torque-consulta",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        0
+      ],
+      "id": "14c16704-456f-41fc-bbd6-7db0e3573e1c",
+      "name": "Webhook (entrada)",
+      "webhookId": "c95a8e38-2fbd-45a4-a84e-d92c10c24448",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "UUX8NeHHkoa2j0jE",
+          "name": "Torque Webhook Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6601f2d8-6feb-4ced-9631-c2a2c7f99b0a",
+              "name": "requestId",
+              "value": "={{ String($json.body.requestId || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "c03c81b8-445a-4817-acc0-37252db84ddd",
+              "name": "session_id",
+              "value": "={{ String($json.body.session_id || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "7daa327d-34d0-4ab9-9b28-9dc52cafad8e",
+              "name": "chat_id",
+              "value": "={{ String($json.body.chat_id || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "bb5a9ac8-48cd-4709-a2dd-414e2fab6885",
+              "name": "email",
+              "value": "={{ String($json.body.email || '').trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "5b315528-9066-49e8-a91f-038a0f0e7af8",
+              "name": "consulta",
+              "value": "={{ String($json.body.consulta || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "15df5b98-b21e-4a9a-9c8a-3985f9497562",
+              "name": "intencion",
+              "value": "={{ $json.body.intencion || 'PEDIDOS_ENVIOS' }}",
+              "type": "string"
+            },
+            {
+              "id": "faefe3f5-f552-459a-84b9-4ab547b5a561",
+              "name": "arquitectura",
+              "value": "={{ $json.body.arquitectura || 'A_Haiku' }}",
+              "type": "string"
+            },
+            {
+              "id": "3f773a3f-0ad8-47c1-a9d3-5256e5dfe6eb",
+              "name": "respuesta_forzada",
+              "value": "={{ $json.body.respuesta_forzada || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "732347f3-3a95-4a4f-8a07-7b5459797429",
+              "name": "traceId",
+              "value": "={{ 'trc-' + $now.toFormat('yyyyMMdd-HHmmss') + '-' + $execution.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -896,
+        0
+      ],
+      "id": "833a7925-5b5c-4da6-a43f-b658e4d9bdf0",
+      "name": "Normalizar entrada"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "3398138a-4134-4372-8dbc-34e19d9eb5a6",
+              "leftValue": "={{ $json.requestId !== '' && $json.consulta !== '' && $json.chat_id !== '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -736,
+        0
+      ],
+      "id": "4b610bc7-d9c4-4535-8793-d9542e7ed803",
+      "name": "¿Solicitud válida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'rechazada', motivo: 'Faltan campos obligatorios: requestId, consulta y chat_id.' }) }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -576,
+        96
+      ],
+      "id": "c3812e70-13b5-4204-ad86-f70718378402",
+      "name": "Responder 400 (incompleta)"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbluK0SxibO0oBOwN",
+          "mode": "list",
+          "cachedResultName": "Solicitudes",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tbluK0SxibO0oBOwN"
+        },
+        "filterByFormula": "={requestId} = '{{ $json.requestId }}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -576,
+        -96
+      ],
+      "id": "5be0ccc8-8bc9-46e5-b663-45c66d6bdcbc",
+      "name": "Buscar solicitud (idempotencia)",
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "9f62775d-78f9-4f0a-8fab-fb8a64b32193",
+              "leftValue": "={{ !!$json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -416,
+        -96
+      ],
+      "id": "8f8ab341-58ba-41e2-a3e4-f34dcba6a515",
+      "name": "¿Ya fue recibida?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'duplicada', requestId: $('Normalizar entrada').first().json.requestId, traceId: ($json.fields ?? $json).traceId, mensaje: 'La solicitud ya se estaba procesando; no se vuelve a ejecutar.' }) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -240,
+        -208
+      ],
+      "id": "56641241-aada-4527-ac08-9ebb134d6181",
+      "name": "Responder 200 (duplicada)"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Normalizar entrada').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Responder 200 (duplicada)",
+            "evento": "solicitud_duplicada",
+            "status": "ignorada",
+            "toolOutput": "={{ $('Normalizar entrada').first().json.requestId }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        -64,
+        -208
+      ],
+      "id": "38f01a37-947c-44ad-b2a6-da1da7575a26",
+      "name": "Log: solicitud duplicada"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appkJGcFFkhu51EDD",
+          "mode": "list",
+          "cachedResultName": "Torque_Memoria",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbluK0SxibO0oBOwN",
+          "mode": "list",
+          "cachedResultName": "Solicitudes",
+          "cachedResultUrl": "https://airtable.com/appkJGcFFkhu51EDD/tbluK0SxibO0oBOwN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "requestId": "={{ $('Normalizar entrada').first().json.requestId }}",
+            "traceId": "={{ $('Normalizar entrada').first().json.traceId }}",
+            "Estado": "RECIBIDA"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "requestId",
+              "displayName": "requestId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        -240,
+        0
+      ],
+      "id": "9c2c1bd7-68fa-4ca8-8714-f1b481876c19",
+      "name": "Registrar solicitud",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jeSlGgRy8JIwqX78",
+          "name": "Airtable Personal Access Token Curso AI ADV"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'recibida', requestId: $('Normalizar entrada').first().json.requestId, traceId: $('Normalizar entrada').first().json.traceId }) }}",
+        "options": {
+          "responseCode": 202
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "998efc3c-2016-4572-9732-9ddea63eafa6",
+      "name": "Responder 202 (recibida)"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "text": "=🚨 *Falla técnica en un worker* · traceId {{ $('Datos del caso').first().json.traceId }} *Detalle:* {{ JSON.stringify($json.error ?? $json).slice(0, 300) }} Se envió al cliente el aviso de derivación. *Supervisor de Atención:* tomar el caso.",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        1168,
+        -400
+      ],
+      "id": "e7c2ad72-8587-4f3b-a120-539afcd90988",
+      "name": "Alerta: falla de worker",
+      "webhookId": "8fd01985-22d3-45a9-b115-a0d66ae8c7b2",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del caso').first().json.chat_id }}",
+        "text": "Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1360,
+        -400
+      ],
+      "id": "f34c9afe-fbc7-49cd-bb71-cb988b59bdd6",
+      "name": "Aviso de derivación (falla técnica)",
+      "webhookId": "231fbb57-06c3-43b0-bba9-f3f626411f8c",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Alerta: falla de worker",
+            "evento": "falla_tecnica",
+            "status": "escalado",
+            "toolOutput": "={{ $json.result?.text || '' }}",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        1552,
+        -400
+      ],
+      "id": "3d063caf-6ebc-4c5c-ac74-6b9d7de54da3",
+      "name": "Log: falla técnica"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.data?.approved === true }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "6799a78e-5d21-4a2f-ace7-1055144fb36b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Aprobar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "5adb0ac0-ecfb-4be7-ba4b-f9f5c0208fae",
+                    "leftValue": "={{ $json.data?.approved === false }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Editar"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Sin respuesta"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        1888,
+        144
+      ],
+      "id": "49a1fc5c-68c8-414d-81ec-8b05ef7ca137",
+      "name": "Decisión humana"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "c5f8c420-7548-49ba-b9ad-4a27290e6355",
+              "leftValue": "={{ String($json.data?.text || '').trim() !== '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        2272,
+        240
+      ],
+      "id": "1a57d85c-c31c-4927-b029-deefc2dee402",
+      "name": "¿Llegó el texto?"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Datos del caso').first().json.chat_id }}",
+        "text": "Derivo tu consulta a un asesor del equipo de Torque Motopartes, que se va a comunicar con vos a la brevedad.",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        2032,
+        448
+      ],
+      "id": "54c795ea-0e18-49ab-b5f1-983c9bb0bf4a",
+      "name": "Aviso seguro al cliente (sin respuesta)",
+      "webhookId": "4d2523c4-b77f-4b28-8b38-d29a34b0a8e6",
+      "credentials": {
+        "telegramApi": {
+          "id": "ZstMtnXb26VqUs2e",
+          "name": "Telegram Torque Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "text": "=⏰ *Sin respuesta del revisor en 4 h* · traceId {{ $('Datos del caso').first().json.traceId }} Se envió al cliente el aviso de derivación (sin promesas). *Supervisor de Atención:* resolver el caso. No se registró nada en el CRM.",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        2256,
+        448
+      ],
+      "id": "982f70c0-b0b3-449c-96b9-fe0347336792",
+      "name": "Escalar al Supervisor de Atención",
+      "webhookId": "7da7f8bd-5973-4cce-af6e-29519e88f9ab",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3PUduI5Gavadv9Zy",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/3PUduI5Gavadv9Zy",
+          "cachedResultName": "Torque – Worker 5 Logger Central"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "traceId": "={{ $('Datos del caso').first().json.traceId }}",
+            "workflow": "Atención Asíncrona (Final)",
+            "nodeName": "Escalar al Supervisor de Atención",
+            "evento": "hitl_sin_respuesta",
+            "status": "escalado",
+            "toolOutput": "timeout 4 h",
+            "systemPromptSnapshot": "=-"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "traceId",
+              "displayName": "traceId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "nodeName",
+              "displayName": "nodeName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "evento",
+              "displayName": "evento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "toolOutput",
+              "displayName": "toolOutput",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "systemPromptSnapshot",
+              "displayName": "systemPromptSnapshot",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "confidenceScore",
+              "displayName": "confidenceScore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        2448,
+        448
+      ],
+      "id": "24e9bcb6-1532-4e00-9bb4-085d6a95b996",
+      "name": "Log: hitl sin respuesta"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-escalamientos",
+          "mode": "name"
+        },
+        "text": "=⚠️ *Envío sin confirmar* · traceId {{ $('Datos del caso').first().json.traceId }}\n*Detalle:* {{ JSON.stringify($json.error ?? $json).slice(0, 300) }}\nTelegram no confirmó la entrega: el mensaje pudo haber llegado. No se reintenta para no duplicarlo.\n*Supervisor de Atención:* verificar en el chat del cliente antes de contactarlo; si llegó, registrar el contacto en HubSpot a mano.",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        2480,
+        -416
+      ],
+      "id": "63da5bef-9fe6-408a-b269-846ecf2b22d7",
+      "name": "Alerta: falla de envío",
+      "webhookId": "d7240e91-8c11-462f-ae97-2816668a379e",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Datos del caso": {
+      "main": [
+        [
+          {
+            "node": "Log: inicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer contexto (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Datos del caso",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Prueba de rechazo?": {
+      "main": [
+        [
+          {
+            "node": "Simular salida del agente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Entrada Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar al Agente (Worker 2)": {
+      "main": [
+        [
+          {
+            "node": "Preparar auditoría",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla de worker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparar auditoría": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Juez (Worker 4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simular salida del agente": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Juez (Worker 4)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delegar al Juez (Worker 4)": {
+      "main": [
+        [
+          {
+            "node": "Registrar veredicto (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla de worker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar veredicto (Airtable)": {
+      "main": [
+        [
+          {
+            "node": "Ruta del veredicto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ruta del veredicto": {
+      "main": [
+        [
+          {
+            "node": "Enviar al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Quedan reintentos?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Quedan reintentos?": {
+      "main": [
+        [
+          {
+            "node": "Reintento con crítica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalar a humano (Aprobar/Editar)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reintento con crítica": {
+      "main": [
+        [
+          {
+            "node": "Entrada Agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar a humano (Aprobar/Editar)": {
+      "main": [
+        [
+          {
+            "node": "Decisión humana",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir texto corregido": {
+      "main": [
+        [
+          {
+            "node": "¿Llegó el texto?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entrada Agente": {
+      "main": [
+        [
+          {
+            "node": "Delegar al Agente (Worker 2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log: inicio": {
+      "main": [
+        [
+          {
+            "node": "¿Prueba de rechazo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar al cliente": {
+      "main": [
+        [
+          {
+            "node": "Log: decisión final",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla de envío",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar versión aprobada": {
+      "main": [
+        [
+          {
+            "node": "Log: hitl aprobado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla de envío",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar versión editada": {
+      "main": [
+        [
+          {
+            "node": "Log: hitl editado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla de envío",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log: decisión final": {
+      "main": [
+        [
+          {
+            "node": "Datos para CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log: hitl aprobado": {
+      "main": [
+        [
+          {
+            "node": "Datos para CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log: hitl editado": {
+      "main": [
+        [
+          {
+            "node": "Datos para CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos para CRM": {
+      "main": [
+        [
+          {
+            "node": "¿Tiene email?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Tiene email?": {
+      "main": [
+        [
+          {
+            "node": "Registrar en CRM (HubSpot)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar en CRM (HubSpot)": {
+      "main": [
+        [
+          {
+            "node": "Log: CRM registrado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alerta: falla CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (entrada)": {
+      "main": [
+        [
+          {
+            "node": "Normalizar entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar entrada": {
+      "main": [
+        [
+          {
+            "node": "¿Solicitud válida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Solicitud válida?": {
+      "main": [
+        [
+          {
+            "node": "Buscar solicitud (idempotencia)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 400 (incompleta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar solicitud (idempotencia)": {
+      "main": [
+        [
+          {
+            "node": "¿Ya fue recibida?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Ya fue recibida?": {
+      "main": [
+        [
+          {
+            "node": "Responder 200 (duplicada)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar solicitud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder 200 (duplicada)": {
+      "main": [
+        [
+          {
+            "node": "Log: solicitud duplicada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar solicitud": {
+      "main": [
+        [
+          {
+            "node": "Responder 202 (recibida)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alerta: falla de worker": {
+      "main": [
+        [
+          {
+            "node": "Aviso de derivación (falla técnica)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aviso de derivación (falla técnica)": {
+      "main": [
+        [
+          {
+            "node": "Log: falla técnica",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Decisión humana": {
+      "main": [
+        [
+          {
+            "node": "Enviar versión aprobada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pedir texto corregido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso seguro al cliente (sin respuesta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Llegó el texto?": {
+      "main": [
+        [
+          {
+            "node": "Enviar versión editada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Aviso seguro al cliente (sin respuesta)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aviso seguro al cliente (sin respuesta)": {
+      "main": [
+        [
+          {
+            "node": "Escalar al Supervisor de Atención",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalar al Supervisor de Atención": {
+      "main": [
+        [
+          {
+            "node": "Log: hitl sin respuesta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder 202 (recibida)": {
+      "main": [
+        [
+          {
+            "node": "Leer contexto (Airtable)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "0nR51sC00gS5AdZ1",
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "0459579e-0b5c-4338-8a84-0cee304101cc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "BW7bVOYju2hSdZpx",
+  "tags": []
+}

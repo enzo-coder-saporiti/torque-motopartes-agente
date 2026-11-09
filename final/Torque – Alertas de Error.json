@@ -1,0 +1,72 @@
+{
+  "name": "Torque – Alertas de Error",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0b240a91-fbe8-4cfd-9f0d-8adbcc4a7ad0",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "#torque-ops-logs",
+          "mode": "name"
+        },
+        "text": "=🔥 *Falla no controlada en n8n*\n*Workflow:* {{ $json.workflow.name }}\n*Último nodo:* {{ $json.execution.lastNodeExecuted }}\n*Error:* {{ $json.execution.error.message }}\n*Ejecución:* {{ $json.execution.url }}\n*Responsable:* Analista de Operaciones (revisar dentro de las 4 h hábiles).",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        176,
+        0
+      ],
+      "id": "2bed84f7-a694-4b39-850e-51dd657acc27",
+      "name": "Aviso a #torque-ops-logs",
+      "webhookId": "1657adce-8307-4e23-89d3-33c0c6cbaff8",
+      "credentials": {
+        "slackApi": {
+          "id": "mluDZHkpJPAnt5uV",
+          "name": "Slack Torque Motopartes"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Aviso a #torque-ops-logs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e60842db-36c5-44d8-baad-e681d98512ee",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9685c372f03ae5bb5f52f45128f5ffa72e7ea9b36fd3e033a1d1755b635dbe4"
+  },
+  "nodeGroups": [],
+  "id": "0nR51sC00gS5AdZ1",
+  "tags": []
+}
