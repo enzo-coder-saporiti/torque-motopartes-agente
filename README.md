@@ -33,13 +33,13 @@ Cada módulo parte del flujo del módulo anterior y lo extiende. No se rehace de
 | [`modulo8/`](modulo8/) | Supervisor QA | Juez AI-as-a-Judge (JSON Schema), Switch de 3 rutas con autocorrección y HITL en Slack, test A/B Haiku vs Sonnet | ✅ Entregado |
 | [`modulo9/`](modulo9/) | Gobernanza y monitoreo | traceId en todos los sub-workflows, Logger central, dashboard en Airtable, TCO/ROI, keys por entorno, riesgos y ZDR | ✅ Entregado |
 | [`modulo10/`](modulo10/) | Brochure técnico-comercial | Propuesta para comité: diagrama de valor, business case con payback, roadmap de fases 0 a 3, pricing híbrido con ventana de conversión de 7 días, plan de 30 días. Marca de origen en HubSpot (5 propiedades) escrita solo después del Juez | ✅ Entregado |
-| `final/` | Proyecto Final | Sistema asíncrono, idempotente y supervisado + Documentación Maestra (DMSA) | Pendiente |
+| [`final/`](final/) | Proyecto Final | Sistema asíncrono e idempotente: webhook con respuesta 202 inmediata, control de duplicados por requestId, Juez obligatorio antes del CRM, HITL con tres salidas, ramas de error con alertas y Documentación Maestra (DMSA) | ✅ Entregado |
 
 ## Stack
 
 | Herramienta | Rol |
 |---|---|
-| n8n Cloud | Orquestación de los flujos (Manager, Workers y Supervisor QA) |
+| n8n Cloud | Orquestación de los flujos (orquestador asíncrono, Workers, Supervisor QA y alertas de error) |
 | Anthropic (Claude) | Haiku 4.5 para clasificación, redacción, resúmenes y voz; Sonnet 4.5 (temperatura 0) para el Juez de calidad |
 | Google Sheets | Base de pedidos (solo lectura) |
 | Airtable | Memoria persistente de clientes, auditoría del Juez, logs de trazabilidad y dashboard operativo |
